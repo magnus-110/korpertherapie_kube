@@ -7,6 +7,29 @@ const fachgebiete = ["Osteopathie", "Psychotherapie", "Labordiagnostik", "Sporth
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-card pb-16 pt-6 sm:pb-20 sm:pt-8 lg:pb-24 lg:pt-10">
+      {/* Grosses, dezentes KK-Zeichen im Hintergrund */}
+      <div
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sand opacity-50"
+        aria-hidden="true"
+      >
+        <svg viewBox="0 0 400 400" fill="none" className="h-auto w-[min(88vw,560px)]">
+          <circle cx="200" cy="200" r="196" stroke="currentColor" strokeWidth="1" />
+          <text
+            x="200"
+            y="200"
+            textAnchor="middle"
+            dominantBaseline="central"
+            fill="currentColor"
+            fontSize="180"
+            fontWeight="300"
+            letterSpacing="-4"
+            className="font-display"
+          >
+            KK
+          </text>
+        </svg>
+      </div>
+
       {/* Feines Papierkorn */}
       <svg
         className="pointer-events-none absolute inset-0 size-full opacity-[0.05]"

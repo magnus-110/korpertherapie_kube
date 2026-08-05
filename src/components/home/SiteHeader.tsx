@@ -15,20 +15,28 @@ function Brand({ light = false }: { light?: boolean }) {
   return (
     <Link to="/" className="flex items-center gap-3">
       <span
-        className={`grid size-11 place-items-center rounded-full border-2 font-display text-base font-semibold ${
+        className={`grid size-11 shrink-0 place-items-center rounded-full border-[1.5px] font-display text-[1.05rem] font-semibold ${
           light ? "border-sage text-sage" : "border-secondary text-secondary"
         }`}
         aria-hidden="true"
       >
         KK
       </span>
-      <span
-        className={`text-[0.78rem] font-bold uppercase leading-tight tracking-[0.1em] ${
-          light ? "text-creme" : "text-primary"
-        }`}
-      >
-        Körpertherapie
-        <br />& Psychotherapie Kube
+      <span className="flex flex-col">
+        <span
+          className={`font-display text-[1.4rem] font-semibold leading-none ${
+            light ? "text-creme" : "text-primary"
+          }`}
+        >
+          Kube
+        </span>
+        <span
+          className={`mt-1.5 text-[0.58rem] font-bold uppercase leading-tight tracking-[0.15em] ${
+            light ? "text-sage" : "text-secondary"
+          }`}
+        >
+          Körpertherapie &amp; Psychotherapie
+        </span>
       </span>
     </Link>
   );
