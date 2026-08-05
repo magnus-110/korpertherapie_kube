@@ -4,17 +4,17 @@ const values = [
   {
     icon: Clock,
     title: "Zeit & Ruhe",
-    text: "Ausführliche Termine ohne Hektik. Raum, um wirklich zuzuhören und gemeinsam zu verstehen, was dir guttut.",
+    text: "Ausführliche Termine ohne Hektik. Raum, um wirklich zuzuhören.",
   },
   {
     icon: Sprout,
     title: "Ganzheitlich",
-    text: "Körper, Seele und Alltag gehören zusammen. Wir schauen auf Zusammenhänge statt nur auf einzelne Symptome.",
+    text: "Körper und Seele gehören zusammen. Wir betrachten beides.",
   },
   {
     icon: HeartHandshake,
     title: "Auf Augenhöhe",
-    text: "Du entscheidest mit. Wir erklären jeden Schritt verständlich und begleiten dich in deinem Tempo.",
+    text: "Verständlich erklärt, gemeinsam entschieden. Du gehst deinen Weg, wir gehen ihn mit.",
   },
 ];
 
@@ -23,14 +23,10 @@ export function Approach() {
     <section id="ansatz" className="py-14 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-[1140px] px-5 sm:px-8">
         <div className="mb-10 max-w-[60ch] lg:mb-14">
-          <p className="eyebrow mb-4">So arbeiten wir</p>
+          <p className="eyebrow mb-4">Unser Ansatz</p>
           <h2 className="text-[clamp(1.8rem,3.6vw,2.6rem)]">
             Der Mensch im Mittelpunkt – nicht das Symptom.
           </h2>
-          <p className="mt-4 text-foreground">
-            Wir nehmen uns Zeit, um zu verstehen, was wirklich hinter deinen Beschwerden steckt.
-            Körper und Seele gehören für uns zusammen – und genauso behandeln wir sie.
-          </p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-3">

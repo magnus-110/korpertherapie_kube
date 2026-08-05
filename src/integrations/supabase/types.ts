@@ -139,6 +139,39 @@ export type Database = {
           },
         ]
       }
+      contact_requests: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          nachricht: string
+          name: string
+          status: Database["public"]["Enums"]["contact_request_status"]
+          telefon: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          nachricht: string
+          name: string
+          status?: Database["public"]["Enums"]["contact_request_status"]
+          telefon?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          nachricht?: string
+          name?: string
+          status?: Database["public"]["Enums"]["contact_request_status"]
+          telefon?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       invoice_items: {
         Row: {
           betrag: number
@@ -340,6 +373,7 @@ export type Database = {
       app_role: "voll" | "eingeschraenkt"
       appointment_status: "geplant" | "abgehakt"
       bank_transaction_status: "offen" | "zugeordnet"
+      contact_request_status: "neu" | "beantwortet" | "erledigt"
       invoice_status: "offen" | "bezahlt" | "angemahnt"
       payment_source: "kontoauszug" | "manuell"
     }
@@ -472,6 +506,7 @@ export const Constants = {
       app_role: ["voll", "eingeschraenkt"],
       appointment_status: ["geplant", "abgehakt"],
       bank_transaction_status: ["offen", "zugeordnet"],
+      contact_request_status: ["neu", "beantwortet", "erledigt"],
       invoice_status: ["offen", "bezahlt", "angemahnt"],
       payment_source: ["kontoauszug", "manuell"],
     },

@@ -1,14 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 const links = [
-  { href: "#ansatz", label: "Ansatz" },
-  { href: "#therapien", label: "Therapien" },
-  { href: "#team", label: "Über uns" },
-  { href: "#kontakt", label: "Kontakt" },
-];
+  { to: "/", label: "Startseite" },
+  { to: "/therapien", label: "Therapien" },
+  { to: "/ueber-uns", label: "Über uns" },
+  { to: "/kontakt", label: "Kontakt" },
+] as const;
 
 function Brand({ light = false }: { light?: boolean }) {
   return (
@@ -41,27 +41,28 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-[1140px] items-center justify-between px-5 py-4 sm:px-8">
         <Brand />
 
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Hauptnavigation">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Hauptnavigation">
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-[0.95rem] font-semibold text-primary transition-colors hover:text-secondary"
+            <Link
+              key={l.to}
+              to={l.to}
+              activeOptions={{ exact: l.to === "/" }}
+              className="text-[0.95rem] font-semibold text-primary transition-colors hover:text-secondary data-[status=active]:text-secondary"
             >
               {l.label}
-            </a>
+            </Link>
           ))}
           <Button asChild variant="pill" size="pillSm">
-            <a href="#kontakt">Termin buchen</a>
+            <Link to="/termin">Termin buchen</Link>
           </Button>
           <Button asChild variant="pillOutline" size="pillSm">
             <Link to="/auth">Intern</Link>
           </Button>
         </nav>
 
-        <div className="flex items-center gap-2 md:hidden">
-          <Button asChild variant="pillOutline" size="pillSm">
-            <Link to="/auth">Intern</Link>
+        <div className="flex items-center gap-2 lg:hidden">
+          <Button asChild variant="pill" size="pillSm">
+            <Link to="/termin">Termin</Link>
           </Button>
           <Sheet>
             <SheetTrigger asChild>
@@ -78,17 +79,29 @@ export function SiteHeader() {
               <SheetTitle className="font-display text-xl text-primary">Menü</SheetTitle>
               <nav className="mt-8 flex flex-col gap-5" aria-label="Mobile Navigation">
                 {links.map((l) => (
-                  <a
-                    key={l.href}
-                    href={l.href}
+                  <SheetClose asChild key={l.to}>
+                    <Link
+                      to={l.to}
+                      activeOptions={{ exact: l.to === "/" }}
+                      className="text-lg font-semibold text-primary transition-colors hover:text-secondary"
+                    >
+                      {l.label}
+                    </Link>
+                  </SheetClose>
+                ))}
+                <SheetClose asChild>
+                  <Link
+                    to="/auth"
                     className="text-lg font-semibold text-primary transition-colors hover:text-secondary"
                   >
-                    {l.label}
-                  </a>
-                ))}
-                <Button asChild variant="pill" size="pill" className="mt-2 w-full">
-                  <a href="#kontakt">Termin buchen</a>
-                </Button>
+                    Intern
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Button asChild variant="pill" size="pill" className="mt-2 w-full">
+                    <Link to="/termin">Termin buchen</Link>
+                  </Button>
+                </SheetClose>
               </nav>
             </SheetContent>
           </Sheet>
