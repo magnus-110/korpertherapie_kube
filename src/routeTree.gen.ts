@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as KontaktRouteImport } from './routes/kontakt'
+import { Route as TerminRouteImport } from './routes/termin'
 import { Route as TherapienRouteImport } from './routes/therapien'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
 import { Route as AuthenticatedPraxisRouteImport } from './routes/_authenticated/praxis'
@@ -28,6 +30,16 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontaktRoute = KontaktRouteImport.update({
+  id: '/kontakt',
+  path: '/kontakt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TerminRoute = TerminRouteImport.update({
+  id: '/termin',
+  path: '/termin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TherapienRoute = TherapienRouteImport.update({
@@ -49,6 +61,8 @@ const AuthenticatedPraxisRoute = AuthenticatedPraxisRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/kontakt': typeof KontaktRoute
+  '/termin': typeof TerminRoute
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/praxis': typeof AuthenticatedPraxisRoute
@@ -56,6 +70,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/kontakt': typeof KontaktRoute
+  '/termin': typeof TerminRoute
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/praxis': typeof AuthenticatedPraxisRoute
@@ -65,20 +81,38 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/kontakt': typeof KontaktRoute
+  '/termin': typeof TerminRoute
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/_authenticated/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/therapien' | '/ueber-uns' | '/praxis'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/kontakt'
+    | '/termin'
+    | '/therapien'
+    | '/ueber-uns'
+    | '/praxis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/therapien' | '/ueber-uns' | '/praxis'
+  to:
+    | '/'
+    | '/auth'
+    | '/kontakt'
+    | '/termin'
+    | '/therapien'
+    | '/ueber-uns'
+    | '/praxis'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/kontakt'
+    | '/termin'
     | '/therapien'
     | '/ueber-uns'
     | '/_authenticated/praxis'
@@ -88,6 +122,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  KontaktRoute: typeof KontaktRoute
+  TerminRoute: typeof TerminRoute
   TherapienRoute: typeof TherapienRoute
   UeberUnsRoute: typeof UeberUnsRoute
 }
@@ -113,6 +149,20 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontakt': {
+      id: '/kontakt'
+      path: '/kontakt'
+      fullPath: '/kontakt'
+      preLoaderRoute: typeof KontaktRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termin': {
+      id: '/termin'
+      path: '/termin'
+      fullPath: '/termin'
+      preLoaderRoute: typeof TerminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/therapien': {
@@ -154,6 +204,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  KontaktRoute: KontaktRoute,
+  TerminRoute: TerminRoute,
   TherapienRoute: TherapienRoute,
   UeberUnsRoute: UeberUnsRoute,
 }
