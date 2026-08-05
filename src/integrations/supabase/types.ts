@@ -16,63 +16,104 @@ export type Database = {
     Tables: {
       appointment_types: {
         Row: {
+          aktiv: boolean
           behandler_id: string | null
+          beschreibung: string | null
           created_at: string
           dauer_minuten: number | null
           gebuehren: number | null
           id: string
+          kurztext: string | null
           name: string
+          online_buchbar: boolean
+          practitioner_id: string | null
+          sortierung: number
           updated_at: string
+          ust_modus: Database["public"]["Enums"]["tax_mode"] | null
         }
         Insert: {
+          aktiv?: boolean
           behandler_id?: string | null
+          beschreibung?: string | null
           created_at?: string
           dauer_minuten?: number | null
           gebuehren?: number | null
           id?: string
+          kurztext?: string | null
           name: string
+          online_buchbar?: boolean
+          practitioner_id?: string | null
+          sortierung?: number
           updated_at?: string
+          ust_modus?: Database["public"]["Enums"]["tax_mode"] | null
         }
         Update: {
+          aktiv?: boolean
           behandler_id?: string | null
+          beschreibung?: string | null
           created_at?: string
           dauer_minuten?: number | null
           gebuehren?: number | null
           id?: string
+          kurztext?: string | null
           name?: string
+          online_buchbar?: boolean
+          practitioner_id?: string | null
+          sortierung?: number
           updated_at?: string
+          ust_modus?: Database["public"]["Enums"]["tax_mode"] | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "appointment_types_practitioner_id_fkey"
+            columns: ["practitioner_id"]
+            isOneToOne: false
+            referencedRelation: "practitioners"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       appointments: {
         Row: {
+          anliegen: string | null
           behandler_id: string | null
           created_at: string
           ende: string
           id: string
+          ist_intern: boolean
           patient_id: string
+          practitioner_id: string | null
+          quelle: Database["public"]["Enums"]["appointment_source"]
           start: string
           status: Database["public"]["Enums"]["appointment_status"]
           type_id: string | null
           updated_at: string
         }
         Insert: {
+          anliegen?: string | null
           behandler_id?: string | null
           created_at?: string
           ende: string
           id?: string
+          ist_intern?: boolean
           patient_id: string
+          practitioner_id?: string | null
+          quelle?: Database["public"]["Enums"]["appointment_source"]
           start: string
           status?: Database["public"]["Enums"]["appointment_status"]
           type_id?: string | null
           updated_at?: string
         }
         Update: {
+          anliegen?: string | null
           behandler_id?: string | null
           created_at?: string
           ende?: string
           id?: string
+          ist_intern?: boolean
           patient_id?: string
+          practitioner_id?: string | null
+          quelle?: Database["public"]["Enums"]["appointment_source"]
           start?: string
           status?: Database["public"]["Enums"]["appointment_status"]
           type_id?: string | null
@@ -87,10 +128,85 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "appointments_practitioner_id_fkey"
+            columns: ["practitioner_id"]
+            isOneToOne: false
+            referencedRelation: "practitioners"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "appointments_type_id_fkey"
             columns: ["type_id"]
             isOneToOne: false
             referencedRelation: "appointment_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_log: {
+        Row: {
+          aenderung: Json | null
+          aktion: string
+          created_at: string
+          datensatz_id: string | null
+          id: string
+          tabelle: string
+          user_id: string | null
+        }
+        Insert: {
+          aenderung?: Json | null
+          aktion: string
+          created_at?: string
+          datensatz_id?: string | null
+          id?: string
+          tabelle: string
+          user_id?: string | null
+        }
+        Update: {
+          aenderung?: Json | null
+          aktion?: string
+          created_at?: string
+          datensatz_id?: string | null
+          id?: string
+          tabelle?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      availability_rules: {
+        Row: {
+          aktiv: boolean
+          bis: string
+          created_at: string
+          id: string
+          practitioner_id: string
+          von: string
+          wochentag: number
+        }
+        Insert: {
+          aktiv?: boolean
+          bis: string
+          created_at?: string
+          id?: string
+          practitioner_id: string
+          von: string
+          wochentag: number
+        }
+        Update: {
+          aktiv?: boolean
+          bis?: string
+          created_at?: string
+          id?: string
+          practitioner_id?: string
+          von?: string
+          wochentag?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "availability_rules_practitioner_id_fkey"
+            columns: ["practitioner_id"]
+            isOneToOne: false
+            referencedRelation: "practitioners"
             referencedColumns: ["id"]
           },
         ]
@@ -138,6 +254,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      booking_settings: {
+        Row: {
+          buchungsfenster_tage: number
+          id: number
+          puffer_minuten: number
+          raster_minuten: number
+          storno_stunden: number
+          updated_at: string
+          vorlauf_stunden: number
+        }
+        Insert: {
+          buchungsfenster_tage?: number
+          id?: number
+          puffer_minuten?: number
+          raster_minuten?: number
+          storno_stunden?: number
+          updated_at?: string
+          vorlauf_stunden?: number
+        }
+        Update: {
+          buchungsfenster_tage?: number
+          id?: number
+          puffer_minuten?: number
+          raster_minuten?: number
+          storno_stunden?: number
+          updated_at?: string
+          vorlauf_stunden?: number
+        }
+        Relationships: []
       }
       contact_requests: {
         Row: {
@@ -250,6 +396,7 @@ export type Database = {
       }
       patients: {
         Row: {
+          app_user_id: string | null
           created_at: string
           id: string
           kontakt: string | null
@@ -258,6 +405,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          app_user_id?: string | null
           created_at?: string
           id?: string
           kontakt?: string | null
@@ -266,6 +414,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          app_user_id?: string | null
           created_at?: string
           id?: string
           kontakt?: string | null
@@ -312,6 +461,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      practitioners: {
+        Row: {
+          aktiv: boolean
+          bezeichnung: string | null
+          created_at: string
+          farbe: string
+          id: string
+          kuerzel: string | null
+          name: string
+          sortierung: number
+          updated_at: string
+          user_id: string | null
+          verfuegbarkeits_modus: Database["public"]["Enums"]["availability_mode"]
+        }
+        Insert: {
+          aktiv?: boolean
+          bezeichnung?: string | null
+          created_at?: string
+          farbe?: string
+          id?: string
+          kuerzel?: string | null
+          name: string
+          sortierung?: number
+          updated_at?: string
+          user_id?: string | null
+          verfuegbarkeits_modus?: Database["public"]["Enums"]["availability_mode"]
+        }
+        Update: {
+          aktiv?: boolean
+          bezeichnung?: string | null
+          created_at?: string
+          farbe?: string
+          id?: string
+          kuerzel?: string | null
+          name?: string
+          sortierung?: number
+          updated_at?: string
+          user_id?: string | null
+          verfuegbarkeits_modus?: Database["public"]["Enums"]["availability_mode"]
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -367,15 +558,22 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_voll: { Args: { _user_id: string }; Returns: boolean }
+      is_behandler: { Args: never; Returns: boolean }
+      is_team: { Args: never; Returns: boolean }
+      is_verwaltung: { Args: never; Returns: boolean }
+      mein_patient_id: { Args: never; Returns: string }
+      mein_practitioner_id: { Args: never; Returns: string }
     }
     Enums: {
-      app_role: "voll" | "eingeschraenkt"
+      app_role: "verwaltung" | "behandler" | "patient"
+      appointment_source: "online" | "manuell" | "telefon"
       appointment_status: "geplant" | "abgehakt"
+      availability_mode: "offen" | "zu"
       bank_transaction_status: "offen" | "zugeordnet"
       contact_request_status: "neu" | "beantwortet" | "erledigt"
       invoice_status: "offen" | "bezahlt" | "angemahnt"
       payment_source: "kontoauszug" | "manuell"
+      tax_mode: "ust_frei_heilbehandlung" | "kleinunternehmer" | "ust_pflichtig"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -503,12 +701,19 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["voll", "eingeschraenkt"],
+      app_role: ["verwaltung", "behandler", "patient"],
+      appointment_source: ["online", "manuell", "telefon"],
       appointment_status: ["geplant", "abgehakt"],
+      availability_mode: ["offen", "zu"],
       bank_transaction_status: ["offen", "zugeordnet"],
       contact_request_status: ["neu", "beantwortet", "erledigt"],
       invoice_status: ["offen", "bezahlt", "angemahnt"],
       payment_source: ["kontoauszug", "manuell"],
+      tax_mode: [
+        "ust_frei_heilbehandlung",
+        "kleinunternehmer",
+        "ust_pflichtig",
+      ],
     },
   },
 } as const
