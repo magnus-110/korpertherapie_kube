@@ -20,7 +20,7 @@ const values = [
 
 export function Approach() {
   return (
-    <section id="ansatz" className="py-14 sm:py-20 lg:py-24">
+    <section id="ansatz" className="bg-card py-14 sm:py-20 lg:py-24">
       <div className="mx-auto max-w-[1140px] px-5 sm:px-8">
         <div className="mb-10 max-w-[60ch] lg:mb-14">
           <p className="eyebrow mb-4">Unser Ansatz</p>
@@ -31,7 +31,7 @@ export function Approach() {
 
         <div className="grid gap-5 md:grid-cols-3">
           {values.map(({ icon: Icon, title, text }) => (
-            <div key={title} className="rounded-3xl bg-card p-8 shadow-[var(--shadow-soft-sm)]">
+            <div key={title} className="rounded-3xl bg-background p-8 shadow-[var(--shadow-soft-sm)]">
               <div className="mb-5 grid size-13 place-items-center rounded-full bg-sage-tint text-secondary">
                 <Icon className="size-6" aria-hidden="true" />
               </div>
