@@ -1,52 +1,37 @@
-# Schritt 2: Backend, Anmeldung und Rollen
+# Website mit Unterseiten
 
-Ziel: eigenes Supabase-Projekt anbinden, Anmeldung mit E-Mail/Passwort für zwei Mitarbeiter-Konten, Rollen, das komplette Datenmodell mit strengem Zugriffsschutz sowie eine Login-Seite und eine schlichte geschützte Startansicht. Keine Zahlungsanbieter, keine fertigen Kalender- oder Rechnungsoberflächen.
+Aus der bisherigen Ein-Seiten-Startseite wird eine Website mit fünf Seiten im bestehenden Kube-Design (Sand/Creme, Tannen- und Salbeigrün, Fraunces/Mulish, Pillen-Buttons, Blobs).
 
-## 1. Eigenes Supabase-Projekt anbinden
+## Seitenstruktur
 
-Kein Lovable Cloud. Stattdessen wird Ihr eigenes Supabase-Projekt über die Supabase-Integration verbunden (oben rechts im Editor das Supabase-Symbol → „Connect Supabase" → Organisation und Projekt auswählen). Danach stehen Migrationen, Auth und der generierte Client bereit. Zugriff ausschließlich über den Standard-Client und Umgebungsvariablen, damit ein späterer Umzug auf selbst gehostetes Supabase reine Konfigurationssache bleibt. Der geheime Server-Schlüssel taucht nie im Frontend auf.
+- `/` Startseite – Hero, Willkommen, Unser Ansatz (3 Werte), Therapien-Teaser (4 Karten mit Links), Team-Teaser, Ruhe-Band mit Zitat, Abschluss-Aufruf mit Telefon
+- `/therapien` – Kopfbereich mit Sprung-Menü, Abschnitte Osteopathie, Psychotherapie (HeilprG, inkl. Hinweiskasten Privatleistung), Labor & Nährstoffanalyse, Sportheilkunde, Ergänzende Therapien, Abschluss-Aufruf
+- `/ueber-uns` – Einleitung, Profile Sabrina und Björn (mit `[…]`-Platzhaltern für Aus- und Weiterbildungen), „Warum Selbstfürsorge dazugehört", Platzhalterfläche für die Fotogalerie
+- `/kontakt` – Adresse/Telefon/E-Mail/Termine/Instagram, Hinweis für frühe Termine, Platzhalterfläche für die Karte, Kontaktformular, FAQ als Akkordeon, Abschluss-Aufruf
+- `/termin` – „In wenigen Schritten zum Termin": Behandlung wählen, dann Kalenderansicht mit freien Zeiten
 
-## 2. Rollen und Profile
+Pflichtseiten mit Platzhaltertexten und Footer-Links: `/impressum`, `/datenschutz`, `/widerruf`, `/sitemap`.
 
-- Rollentyp mit den Werten `voll` und `eingeschraenkt`.
-- Tabelle `user_roles` (getrennt von den Profildaten, damit Rechte nicht manipulierbar sind) plus Prüf-Funktion `has_role` und Komfort-Funktion `is_voll()`.
-- Tabelle `profiles` (id → Benutzer, name) wird beim Registrieren automatisch per Trigger angelegt.
-- Sabrina: `voll`. Björn: `eingeschraenkt`.
-- Keine Zwei-Faktor-Anmeldung in diesem Schritt (kommt später bei Bedarf).
+## Navigation
 
-## 3. Tabellen
+Header: Startseite · Therapien · Über uns · Kontakt – dazu auf jeder Seite an gleicher Stelle der Button **Termin buchen** (führt zu `/termin`) sowie der bestehende „Intern"-Link. Mobile Navigation über das bestehende Sheet. Footer mit Adresse, Seitenlinks und Pflichtseiten.
 
-Behandlung/Betrieb (für beide Rollen lesbar/schreibbar, nur angemeldet):
-- `patients` (name, kontakt, notizen)
-- `appointment_types` (name, behandler_id, dauer_minuten, gebuehren)
-- `appointments` (patient_id, type_id, behandler_id, start, ende, status: geplant | abgehakt)
+## Terminseite (Kalender)
 
-Abrechnung (ausschließlich Rolle `voll`):
-- `invoices` (rechnungsnummer eindeutig, patient_id, datum, betrag, status: offen | bezahlt | angemahnt)
-- `invoice_items` (invoice_id, bezeichnung, betrag)
-- `payments` (invoice_id, betrag, datum, quelle: kontoauszug | manuell)
-- `bank_transactions` (datum, betrag, verwendungszweck, absender, status: offen | zugeordnet, matched_invoice_id)
+Schritt 1: Auswahl der Behandlungsart. Schritt 2: Kalender (shadcn `Calendar`) mit Tagesauswahl und Liste der freien Zeitfenster für den gewählten Tag. Die Zeiten werden aus den Praxis-Öffnungszeiten und der Dauer der Behandlung berechnet und mit bereits belegten Terminen abgeglichen. Der eigentliche Buchungsabschluss (Patientendaten speichern, Termin anlegen, Bestätigung) folgt in einem späteren Schritt – hier zunächst die Auswahl mit Hinweis „Buchung folgt in Kürze".
 
-Die Zahlungslogik bleibt bewusst link- und dienstleisterfrei: später verschickt die App nur eine E-Mail mit Betrag und Rechnungsnummer, der Abgleich erfolgt über hochgeladene Kontoauszüge gegen `bank_transactions`. Das Modell ist dafür bereits vorbereitet, die Logik kommt in einem späteren Prompt.
+## Kontaktformular
 
-## 4. Zugriffsschutz
+Neue Tabelle `contact_requests` (Name, E-Mail, Telefon optional, Nachricht, Status, Zeitpunkt) mit RLS: Anlegen durch Website-Besucher erlaubt, Lesen und Bearbeiten nur für angemeldete Mitarbeiter:innen. Validierung mit Zod (Pflichtfelder, Längenlimits, E-Mail-Format), Erfolgs- und Fehlermeldung per Toast.
 
-- Zeilenschutz (RLS) auf jeder einzelnen Tabelle, ohne Ausnahme.
-- Keine anonymen Rechte: ausgeloggte Besucher sehen keine Daten.
-- Abrechnungstabellen: Lesen und Schreiben nur mit Rolle `voll` — Björn sieht sie technisch gar nicht, nicht nur in der Oberfläche.
-- `profiles`: jeder sieht die Namen der Kolleg:innen, ändern darf jede:r nur das eigene Profil.
-- `user_roles`: nur lesbar, Änderungen nicht über die App.
+## Technische Hinweise
 
-## 5. Oberfläche
+- Ein Routen-Datei pro Seite unter `src/routes/`, gemeinsame Kopf-/Fußzeile bleibt in `SiteHeader`/`SiteFooter`.
+- Jede Seite bekommt eigene `head()`-Metadaten (Titel, Beschreibung, og:title, og:description) auf Deutsch; JSON-LD `MedicalBusiness` bleibt auf der Startseite.
+- Bestehende Sektionskomponenten werden aufgeteilt und neu getextet; wiederverwendbare Bausteine: `PageHero`, `CtaBand`, `TherapySection`.
+- Formulareintrag über eine TanStack-Server-Funktion; kein Zugriff mit Service-Role im Frontend.
+- Vorsichtige Formulierungen bei Heilaussagen („kann helfen", „unterstützt"), semantisches HTML, eine H1 pro Seite, sichtbarer Fokus, responsiv.
 
-- `/auth`: Anmeldeseite im bestehenden Designsystem (Sand/Creme, Fraunces/Mulish, Pillen-Buttons, weiche Blob-Formen). E-Mail + Passwort, klare Fehlermeldungen auf Deutsch, sichtbarer Fokus, mobil nutzbar. Kein öffentliches Registrieren.
-- `/praxis`: geschützte Startansicht — „Angemeldet als …", Rollenhinweis und Platzhalterkacheln (Kalender, Patienten, Dokumentation; Abrechnung/Einstellungen nur bei Rolle `voll` sichtbar). Abmelden-Schaltfläche.
-- Die öffentliche Startseite bleibt unverändert; der Header bekommt einen dezenten Zugang zum internen Bereich.
-- Gesundheitsdaten liegen ausschließlich hinter der Anmeldung.
+## Noch offen (Platzhalter im Text)
 
-## Technische Details
-
-- Geschützte Routen unter `src/routes/_authenticated/`, der Zugangsschutz kommt aus dem integrationseigenen Layout (Weiterleitung nach `/auth`).
-- Datenzugriff im Browser über den generierten Supabase-Client; serverseitige Abfragen später über Server-Funktionen mit Auth-Middleware.
-- Rollenprüfung immer serverseitig über die `security definer`-Funktion `has_role`, nie über Client-Zustand.
-- Anlage der beiden Mitarbeiter-Konten: Registrierung mit automatischer Bestätigung, danach werden die Rollen gesetzt. Passwörter geben Sie beim ersten Login selbst vor bzw. ändern sie.
+E-Mail-Adresse, Aus- und Weiterbildungen, Behandlungsdauer, Absagefrist, Mitzubringendes, Parkplatz-Hinweis, Praxisfotos.
