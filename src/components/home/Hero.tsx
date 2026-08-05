@@ -6,7 +6,7 @@ const fachgebiete = ["Osteopathie", "Psychotherapie", "Labordiagnostik", "Sporth
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-card pb-16 pt-6 sm:pb-20 sm:pt-8 lg:pb-24 lg:pt-10">
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-card pb-16 pt-6 sm:pb-20 sm:pt-8 lg:pb-24 lg:pt-10">
       {/* Grosses, dezentes KK-Zeichen im Hintergrund */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sand opacity-65"
@@ -41,7 +41,7 @@ export function Hero() {
         <rect width="100%" height="100%" filter="url(#kubeKorn)" />
       </svg>
 
-      <div className="relative mx-auto max-w-[1140px] px-5 py-14 text-center sm:px-8 sm:py-16 lg:py-20">
+      <div className="relative mx-auto flex max-w-[1140px] flex-col items-center justify-center px-5 py-14 text-center sm:px-8 sm:py-16 lg:py-20">
         <p className="animate-rise text-[0.65rem] font-bold uppercase leading-relaxed tracking-[0.19em] text-secondary">
           {fachgebiete.join(" · ")}
         </p>
