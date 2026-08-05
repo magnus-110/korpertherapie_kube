@@ -12,7 +12,7 @@ Kein Lovable Cloud. Stattdessen wird Ihr eigenes Supabase-Projekt über die Supa
 - Tabelle `user_roles` (getrennt von den Profildaten, damit Rechte nicht manipulierbar sind) plus Prüf-Funktion `has_role` und Komfort-Funktion `is_voll()`.
 - Tabelle `profiles` (id → Benutzer, name) wird beim Registrieren automatisch per Trigger angelegt.
 - Sabrina: `voll`. Björn: `eingeschraenkt`.
-- Zwei-Faktor per TOTP wird in der Anmeldung vorbereitet: die Anmeldung erkennt eine erforderliche zweite Stufe und zeigt dann das Code-Feld; Aktivieren der 2FA folgt in einem späteren Schritt.
+- Keine Zwei-Faktor-Anmeldung in diesem Schritt (kommt später bei Bedarf).
 
 ## 3. Tabellen
 
