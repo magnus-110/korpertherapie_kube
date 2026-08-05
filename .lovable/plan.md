@@ -1,10 +1,10 @@
 # Schritt 2: Backend, Anmeldung und Rollen
 
-Ziel: Lovable Cloud aktivieren, Anmeldung mit E-Mail/Passwort für zwei Mitarbeiter-Konten, Rollen, das komplette Datenmodell mit strengem Zugriffsschutz sowie eine Login-Seite und eine schlichte geschützte Startansicht. Keine Zahlungsanbieter, keine fertigen Kalender- oder Rechnungsoberflächen.
+Ziel: eigenes Supabase-Projekt anbinden, Anmeldung mit E-Mail/Passwort für zwei Mitarbeiter-Konten, Rollen, das komplette Datenmodell mit strengem Zugriffsschutz sowie eine Login-Seite und eine schlichte geschützte Startansicht. Keine Zahlungsanbieter, keine fertigen Kalender- oder Rechnungsoberflächen.
 
-## 1. Cloud-Backend aktivieren
+## 1. Eigenes Supabase-Projekt anbinden
 
-Lovable Cloud (Datenbank, Auth, Server-Funktionen) wird eingeschaltet. Zugriff ausschließlich über den Standard-Client und Umgebungsvariablen, damit ein späterer Umzug auf ein selbst gehostetes Backend reine Konfigurationssache bleibt. Der geheime Server-Schlüssel taucht nie im Frontend auf.
+Kein Lovable Cloud. Stattdessen wird Ihr eigenes Supabase-Projekt über die Supabase-Integration verbunden (oben rechts im Editor das Supabase-Symbol → „Connect Supabase" → Organisation und Projekt auswählen). Danach stehen Migrationen, Auth und der generierte Client bereit. Zugriff ausschließlich über den Standard-Client und Umgebungsvariablen, damit ein späterer Umzug auf selbst gehostetes Supabase reine Konfigurationssache bleibt. Der geheime Server-Schlüssel taucht nie im Frontend auf.
 
 ## 2. Rollen und Profile
 
