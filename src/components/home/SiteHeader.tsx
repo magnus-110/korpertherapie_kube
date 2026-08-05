@@ -54,37 +54,45 @@ export function SiteHeader() {
           <Button asChild variant="pill" size="pillSm">
             <a href="#kontakt">Termin buchen</a>
           </Button>
+          <Button asChild variant="pillOutline" size="pillSm">
+            <Link to="/auth">Intern</Link>
+          </Button>
         </nav>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Menü öffnen"
-              className="min-h-11 min-w-11 text-primary md:hidden"
-            >
-              <Menu className="size-6" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="bg-creme">
-            <SheetTitle className="font-display text-xl text-primary">Menü</SheetTitle>
-            <nav className="mt-8 flex flex-col gap-5" aria-label="Mobile Navigation">
-              {links.map((l) => (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  className="text-lg font-semibold text-primary transition-colors hover:text-secondary"
-                >
-                  {l.label}
-                </a>
-              ))}
-              <Button asChild variant="pill" size="pill" className="mt-2 w-full">
-                <a href="#kontakt">Termin buchen</a>
+        <div className="flex items-center gap-2 md:hidden">
+          <Button asChild variant="pillOutline" size="pillSm">
+            <Link to="/auth">Intern</Link>
+          </Button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Menü öffnen"
+                className="min-h-11 min-w-11 text-primary"
+              >
+                <Menu className="size-6" />
               </Button>
-            </nav>
-          </SheetContent>
-        </Sheet>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-creme">
+              <SheetTitle className="font-display text-xl text-primary">Menü</SheetTitle>
+              <nav className="mt-8 flex flex-col gap-5" aria-label="Mobile Navigation">
+                {links.map((l) => (
+                  <a
+                    key={l.href}
+                    href={l.href}
+                    className="text-lg font-semibold text-primary transition-colors hover:text-secondary"
+                  >
+                    {l.label}
+                  </a>
+                ))}
+                <Button asChild variant="pill" size="pill" className="mt-2 w-full">
+                  <a href="#kontakt">Termin buchen</a>
+                </Button>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );
