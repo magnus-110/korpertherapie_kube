@@ -7,10 +7,10 @@ const fachgebiete = ["Osteopathie", "Psychotherapie", "Labordiagnostik", "Sporth
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden py-10 sm:py-14 lg:py-16">
+    <section className="relative overflow-hidden bg-card pb-12 pt-4 sm:pb-16 sm:pt-5 lg:pb-20 lg:pt-6">
       {/* Feines Papierkorn – nimmt der Fläche das Digital-Glatte */}
       <svg
-        className="pointer-events-none absolute inset-0 size-full opacity-[0.055]"
+        className="pointer-events-none absolute inset-0 size-full opacity-[0.05]"
         aria-hidden="true"
       >
         <filter id="kubeKorn">
@@ -22,7 +22,7 @@ export function Hero() {
       <div className="relative mx-auto max-w-[1140px] px-5 sm:px-8">
         {/* Monogramm als Wasserzeichen */}
         <span
-          className="pointer-events-none absolute right-6 top-8 select-none font-display text-[clamp(6rem,14vw,11rem)] leading-none tracking-tight text-primary opacity-[0.045]"
+          className="pointer-events-none absolute right-6 top-2 select-none font-display text-[clamp(6rem,14vw,11rem)] leading-none tracking-tight text-primary opacity-[0.045]"
           aria-hidden="true"
         >
           KK
@@ -34,7 +34,7 @@ export function Hero() {
           </p>
         </div>
 
-        <div className="relative mt-8 grid items-start gap-10 lg:mt-12 lg:grid-cols-[1.42fr_0.9fr] lg:gap-14">
+        <div className="relative mt-7 grid items-start gap-10 lg:mt-9 lg:grid-cols-[1.42fr_0.9fr] lg:gap-14">
           <div>
             <h1
               className="animate-rise font-display text-[clamp(2.2rem,4.8vw,3.5rem)] font-normal leading-[1.08] tracking-tight text-primary"
