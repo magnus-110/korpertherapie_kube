@@ -344,6 +344,23 @@
   }
 }
 
+@utility animate-sway {
+  animation: kube-sway 34s ease-in-out infinite alternate;
+}
+
+@utility animate-sway-slow {
+  animation: kube-sway 46s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes kube-sway {
+  from {
+    transform: translateX(-6%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

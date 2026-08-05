@@ -24,11 +24,11 @@ export function HeroTermine() {
     <div className="relative">
       {/* Salbeifläche, leicht versetzt – erzeugt Tiefe ohne Schlagschatten */}
       <div
-        className="absolute -left-2 top-3 h-[96%] w-full rounded-[22px] bg-sage opacity-35"
+        className="absolute -left-2 top-3 h-[96%] w-full rounded-[22px] bg-sage opacity-45"
         aria-hidden="true"
       />
 
-      <div className="relative rounded-3xl bg-creme p-6 shadow-[var(--shadow-soft-md)] sm:p-7">
+      <div className="relative rounded-3xl border border-primary/10 bg-creme p-6 shadow-[var(--shadow-soft-md)] sm:p-7">
         <p className="eyebrow mb-1.5">Termin</p>
         <h2 className="text-xl sm:text-2xl">Wann passt es dir?</h2>
 
