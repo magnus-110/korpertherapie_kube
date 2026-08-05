@@ -3,9 +3,11 @@ import { Activity, ArrowRight, Brain, FlaskConical, Hand } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { CtaBand } from "@/components/site/CtaBand";
 import { Hero } from "@/components/home/Hero";
+import { BookingTeaser } from "@/components/home/BookingTeaser";
 import { Approach } from "@/components/home/Approach";
 import { Button } from "@/components/ui/button";
 import { praxis } from "@/lib/praxis";
+import praxisRaum from "@/assets/praxis-raum.jpg";
 
 const title = "Körpertherapie und Psychotherapie Kube · Gersthofen";
 const description =
@@ -78,18 +80,35 @@ function Index() {
       <Hero />
 
       <section className="py-14 sm:py-20">
-        <div className="mx-auto max-w-[1140px] px-5 sm:px-8">
-          <h2 className="max-w-[22ch] text-[clamp(1.8rem,3.6vw,2.6rem)]">Schön, dass du da bist.</h2>
-          <p className="mt-5 max-w-[62ch] text-lg">
-            Bei uns stehst du im Mittelpunkt – mit deiner Geschichte, deinen Beschwerden und deinen
-            Zielen. Wir nehmen uns Zeit, verstehen gemeinsam mit dir die Ursachen deiner Symptome
-            und verbinden bewährte medizinische Erkenntnisse mit ganzheitlichen Methoden. In einer
-            ruhigen, vertrauensvollen Atmosphäre, in der du dich sicher und gut aufgehoben fühlst.
-          </p>
+        <div className="mx-auto grid max-w-[1140px] items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          <div>
+            <h2 className="max-w-[22ch] text-[clamp(1.8rem,3.6vw,2.6rem)]">
+              Schön, dass du da bist.
+            </h2>
+            <p className="mt-5 max-w-[62ch] text-lg">
+              Bei uns stehst du im Mittelpunkt – mit deiner Geschichte, deinen Beschwerden und
+              deinen Zielen. Wir nehmen uns Zeit, verstehen gemeinsam mit dir die Ursachen deiner
+              Symptome und verbinden bewährte medizinische Erkenntnisse mit ganzheitlichen Methoden.
+              In einer ruhigen, vertrauensvollen Atmosphäre, in der du dich sicher und gut
+              aufgehoben fühlst.
+            </p>
+          </div>
+          <div className="overflow-hidden rounded-3xl border-8 border-creme shadow-[var(--shadow-soft-lg)]">
+            <img
+              src={praxisRaum}
+              alt="Heller, ruhiger Behandlungsraum der Praxis Kube in Gersthofen"
+              width={1024}
+              height={1024}
+              loading="lazy"
+              className="aspect-[4/3] size-full object-cover"
+            />
+          </div>
         </div>
       </section>
 
       <Approach />
+
+      <BookingTeaser />
 
       <section className="bg-card py-14 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1140px] px-5 sm:px-8">

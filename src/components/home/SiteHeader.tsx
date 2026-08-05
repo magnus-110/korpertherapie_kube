@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { Menu } from "lucide-react";
+import { Lock, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const links = [
   { to: "/", label: "Startseite" },
@@ -55,9 +56,20 @@ export function SiteHeader() {
           <Button asChild variant="pill" size="pillSm">
             <Link to="/termin">Termin buchen</Link>
           </Button>
-          <Button asChild variant="pillOutline" size="pillSm">
-            <Link to="/auth">Intern</Link>
-          </Button>
+          <TooltipProvider delayDuration={150}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link
+                  to="/auth"
+                  aria-label="Interner Bereich – Anmeldung"
+                  className="grid min-h-11 min-w-11 place-items-center rounded-full text-primary/70 transition-colors hover:bg-accent hover:text-secondary"
+                >
+                  <Lock className="size-5" aria-hidden="true" />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>Interner Bereich</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </nav>
 
         <div className="flex items-center gap-2 lg:hidden">

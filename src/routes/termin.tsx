@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { de } from "date-fns/locale";
-import { format } from "date-fns";
+import { format, isValid, parseISO, startOfDay } from "date-fns";
 import { Mail, Phone } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero } from "@/components/site/PageHero";
@@ -13,7 +13,20 @@ const title = "Termin buchen | Praxis Kube Gersthofen";
 const description =
   "Wähle einen Wunschtermin in der Privatpraxis Kube in Gersthofen oder erreiche uns telefonisch und per E-Mail.";
 
+type TerminSearch = { tag?: string | undefined };
+
+/** Nimmt einen Tag im Format 2026-08-12 aus der Adresszeile entgegen. */
+function leseTag(wert: unknown): string | undefined {
+  if (typeof wert !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(wert)) return undefined;
+  const d = parseISO(wert);
+  if (!isValid(d) || d < startOfDay(new Date())) return undefined;
+  return wert;
+}
+
 export const Route = createFileRoute("/termin")({
+  validateSearch: (search: Record<string, unknown>): TerminSearch => ({
+    tag: leseTag(search["tag"]),
+  }),
   head: () => ({
     meta: [
       { title },
@@ -36,7 +49,8 @@ const steps = [
 ];
 
 function TerminPage() {
-  const [date, setDate] = useState<Date | undefined>();
+  const { tag } = Route.useSearch();
+  const [date, setDate] = useState<Date | undefined>(() => (tag ? parseISO(tag) : undefined));
 
   return (
     <SiteLayout>
@@ -64,9 +78,7 @@ function TerminPage() {
 
             <div className="mt-10 rounded-3xl bg-card p-8 shadow-[var(--shadow-soft-sm)]">
               <h3 className="text-xl">Lieber persönlich?</h3>
-              <p className="mt-3">
-                Wir sind telefonisch für dich da und rufen auch gern zurück.
-              </p>
+              <p className="mt-3">Wir sind telefonisch für dich da und rufen auch gern zurück.</p>
               <div className="mt-6 flex flex-wrap gap-3.5">
                 <Button asChild variant="pill" size="pill">
                   <a href={praxis.telefonHref}>
@@ -89,6 +101,7 @@ function TerminPage() {
                 mode="single"
                 selected={date}
                 onSelect={setDate}
+                {...(date ? { defaultMonth: date } : {})}
                 locale={de}
                 weekStartsOn={1}
                 disabled={{ before: new Date() }}
@@ -99,10 +112,10 @@ function TerminPage() {
             <div className="mt-6 rounded-2xl bg-sage-tint p-6 text-sage-foreground">
               {date ? (
                 <p>
-                  Gewählter Tag: <strong>{format(date, "EEEE, d. MMMM yyyy", { locale: de })}</strong>
-                  . Die Anzeige freier Uhrzeiten und die verbindliche Online-Buchung folgen in
-                  Kürze – bis dahin melde dich bitte kurz telefonisch oder per E-Mail mit diesem
-                  Wunschtermin.
+                  Gewählter Tag:{" "}
+                  <strong>{format(date, "EEEE, d. MMMM yyyy", { locale: de })}</strong>. Die Anzeige
+                  freier Uhrzeiten und die verbindliche Online-Buchung folgen in Kürze – bis dahin
+                  melde dich bitte kurz telefonisch oder per E-Mail mit diesem Wunschtermin.
                 </p>
               ) : (
                 <p>
