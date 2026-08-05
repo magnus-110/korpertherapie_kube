@@ -14,16 +14,334 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointment_types: {
+        Row: {
+          behandler_id: string | null
+          created_at: string
+          dauer_minuten: number | null
+          gebuehren: number | null
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          behandler_id?: string | null
+          created_at?: string
+          dauer_minuten?: number | null
+          gebuehren?: number | null
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          behandler_id?: string | null
+          created_at?: string
+          dauer_minuten?: number | null
+          gebuehren?: number | null
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      appointments: {
+        Row: {
+          behandler_id: string | null
+          created_at: string
+          ende: string
+          id: string
+          patient_id: string
+          start: string
+          status: Database["public"]["Enums"]["appointment_status"]
+          type_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          behandler_id?: string | null
+          created_at?: string
+          ende: string
+          id?: string
+          patient_id: string
+          start: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          type_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          behandler_id?: string | null
+          created_at?: string
+          ende?: string
+          id?: string
+          patient_id?: string
+          start?: string
+          status?: Database["public"]["Enums"]["appointment_status"]
+          type_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_type_id_fkey"
+            columns: ["type_id"]
+            isOneToOne: false
+            referencedRelation: "appointment_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bank_transactions: {
+        Row: {
+          absender: string | null
+          betrag: number
+          created_at: string
+          datum: string
+          id: string
+          matched_invoice_id: string | null
+          status: Database["public"]["Enums"]["bank_transaction_status"]
+          updated_at: string
+          verwendungszweck: string | null
+        }
+        Insert: {
+          absender?: string | null
+          betrag: number
+          created_at?: string
+          datum: string
+          id?: string
+          matched_invoice_id?: string | null
+          status?: Database["public"]["Enums"]["bank_transaction_status"]
+          updated_at?: string
+          verwendungszweck?: string | null
+        }
+        Update: {
+          absender?: string | null
+          betrag?: number
+          created_at?: string
+          datum?: string
+          id?: string
+          matched_invoice_id?: string | null
+          status?: Database["public"]["Enums"]["bank_transaction_status"]
+          updated_at?: string
+          verwendungszweck?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bank_transactions_matched_invoice_id_fkey"
+            columns: ["matched_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoice_items: {
+        Row: {
+          betrag: number
+          bezeichnung: string
+          created_at: string
+          id: string
+          invoice_id: string
+          updated_at: string
+        }
+        Insert: {
+          betrag: number
+          bezeichnung: string
+          created_at?: string
+          id?: string
+          invoice_id: string
+          updated_at?: string
+        }
+        Update: {
+          betrag?: number
+          bezeichnung?: string
+          created_at?: string
+          id?: string
+          invoice_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          betrag: number
+          created_at: string
+          datum: string
+          id: string
+          patient_id: string
+          rechnungsnummer: string
+          status: Database["public"]["Enums"]["invoice_status"]
+          updated_at: string
+        }
+        Insert: {
+          betrag: number
+          created_at?: string
+          datum: string
+          id?: string
+          patient_id: string
+          rechnungsnummer: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          updated_at?: string
+        }
+        Update: {
+          betrag?: number
+          created_at?: string
+          datum?: string
+          id?: string
+          patient_id?: string
+          rechnungsnummer?: string
+          status?: Database["public"]["Enums"]["invoice_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      patients: {
+        Row: {
+          created_at: string
+          id: string
+          kontakt: string | null
+          name: string
+          notizen: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kontakt?: string | null
+          name: string
+          notizen?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kontakt?: string | null
+          name?: string
+          notizen?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      payments: {
+        Row: {
+          betrag: number
+          created_at: string
+          datum: string
+          id: string
+          invoice_id: string
+          quelle: Database["public"]["Enums"]["payment_source"]
+          updated_at: string
+        }
+        Insert: {
+          betrag: number
+          created_at?: string
+          datum: string
+          id?: string
+          invoice_id: string
+          quelle?: Database["public"]["Enums"]["payment_source"]
+          updated_at?: string
+        }
+        Update: {
+          betrag?: number
+          created_at?: string
+          datum?: string
+          id?: string
+          invoice_id?: string
+          quelle?: Database["public"]["Enums"]["payment_source"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          name: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_voll: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "voll" | "eingeschraenkt"
+      appointment_status: "geplant" | "abgehakt"
+      bank_transaction_status: "offen" | "zugeordnet"
+      invoice_status: "offen" | "bezahlt" | "angemahnt"
+      payment_source: "kontoauszug" | "manuell"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +468,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["voll", "eingeschraenkt"],
+      appointment_status: ["geplant", "abgehakt"],
+      bank_transaction_status: ["offen", "zugeordnet"],
+      invoice_status: ["offen", "bezahlt", "angemahnt"],
+      payment_source: ["kontoauszug", "manuell"],
+    },
   },
 } as const
