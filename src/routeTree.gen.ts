@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as TherapienRouteImport } from './routes/therapien'
+import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
 import { Route as AuthenticatedPraxisRouteImport } from './routes/_authenticated/praxis'
 
 const IndexRoute = IndexRouteImport.update({
@@ -28,6 +30,16 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TherapienRoute = TherapienRouteImport.update({
+  id: '/therapien',
+  path: '/therapien',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UeberUnsRoute = UeberUnsRouteImport.update({
+  id: '/ueber-uns',
+  path: '/ueber-uns',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedPraxisRoute = AuthenticatedPraxisRouteImport.update({
   id: '/praxis',
   path: '/praxis',
@@ -37,11 +49,15 @@ const AuthenticatedPraxisRoute = AuthenticatedPraxisRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/therapien': typeof TherapienRoute
+  '/ueber-uns': typeof UeberUnsRoute
   '/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/therapien': typeof TherapienRoute
+  '/ueber-uns': typeof UeberUnsRoute
   '/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRoutesById {
@@ -49,20 +65,31 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/therapien': typeof TherapienRoute
+  '/ueber-uns': typeof UeberUnsRoute
   '/_authenticated/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/praxis'
+  fullPaths: '/' | '/auth' | '/therapien' | '/ueber-uns' | '/praxis'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/praxis'
-  id: '__root__' | '/' | '/_authenticated' | '/auth' | '/_authenticated/praxis'
+  to: '/' | '/auth' | '/therapien' | '/ueber-uns' | '/praxis'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/therapien'
+    | '/ueber-uns'
+    | '/_authenticated/praxis'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  TherapienRoute: typeof TherapienRoute
+  UeberUnsRoute: typeof UeberUnsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +113,20 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/therapien': {
+      id: '/therapien'
+      path: '/therapien'
+      fullPath: '/therapien'
+      preLoaderRoute: typeof TherapienRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ueber-uns': {
+      id: '/ueber-uns'
+      path: '/ueber-uns'
+      fullPath: '/ueber-uns'
+      preLoaderRoute: typeof UeberUnsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/praxis': {
@@ -113,6 +154,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  TherapienRoute: TherapienRoute,
+  UeberUnsRoute: UeberUnsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
