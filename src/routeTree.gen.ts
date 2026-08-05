@@ -12,10 +12,14 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DatenschutzRouteImport } from './routes/datenschutz'
+import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as KontaktRouteImport } from './routes/kontakt'
+import { Route as SitemapRouteImport } from './routes/sitemap'
 import { Route as TerminRouteImport } from './routes/termin'
 import { Route as TherapienRouteImport } from './routes/therapien'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
+import { Route as WiderrufRouteImport } from './routes/widerruf'
 import { Route as AuthenticatedPraxisRouteImport } from './routes/_authenticated/praxis'
 
 const IndexRoute = IndexRouteImport.update({
@@ -32,9 +36,24 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DatenschutzRoute = DatenschutzRouteImport.update({
+  id: '/datenschutz',
+  path: '/datenschutz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpressumRoute = ImpressumRouteImport.update({
+  id: '/impressum',
+  path: '/impressum',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KontaktRoute = KontaktRouteImport.update({
   id: '/kontakt',
   path: '/kontakt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapRoute = SitemapRouteImport.update({
+  id: '/sitemap',
+  path: '/sitemap',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TerminRoute = TerminRouteImport.update({
@@ -52,6 +71,11 @@ const UeberUnsRoute = UeberUnsRouteImport.update({
   path: '/ueber-uns',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WiderrufRoute = WiderrufRouteImport.update({
+  id: '/widerruf',
+  path: '/widerruf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedPraxisRoute = AuthenticatedPraxisRouteImport.update({
   id: '/praxis',
   path: '/praxis',
@@ -61,19 +85,27 @@ const AuthenticatedPraxisRoute = AuthenticatedPraxisRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/datenschutz': typeof DatenschutzRoute
+  '/impressum': typeof ImpressumRoute
   '/kontakt': typeof KontaktRoute
+  '/sitemap': typeof SitemapRoute
   '/termin': typeof TerminRoute
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
+  '/widerruf': typeof WiderrufRoute
   '/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/datenschutz': typeof DatenschutzRoute
+  '/impressum': typeof ImpressumRoute
   '/kontakt': typeof KontaktRoute
+  '/sitemap': typeof SitemapRoute
   '/termin': typeof TerminRoute
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
+  '/widerruf': typeof WiderrufRoute
   '/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRoutesById {
@@ -81,10 +113,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/datenschutz': typeof DatenschutzRoute
+  '/impressum': typeof ImpressumRoute
   '/kontakt': typeof KontaktRoute
+  '/sitemap': typeof SitemapRoute
   '/termin': typeof TerminRoute
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
+  '/widerruf': typeof WiderrufRoute
   '/_authenticated/praxis': typeof AuthenticatedPraxisRoute
 }
 export interface FileRouteTypes {
@@ -92,29 +128,41 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/datenschutz'
+    | '/impressum'
     | '/kontakt'
+    | '/sitemap'
     | '/termin'
     | '/therapien'
     | '/ueber-uns'
+    | '/widerruf'
     | '/praxis'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/datenschutz'
+    | '/impressum'
     | '/kontakt'
+    | '/sitemap'
     | '/termin'
     | '/therapien'
     | '/ueber-uns'
+    | '/widerruf'
     | '/praxis'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/datenschutz'
+    | '/impressum'
     | '/kontakt'
+    | '/sitemap'
     | '/termin'
     | '/therapien'
     | '/ueber-uns'
+    | '/widerruf'
     | '/_authenticated/praxis'
   fileRoutesById: FileRoutesById
 }
@@ -122,10 +170,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DatenschutzRoute: typeof DatenschutzRoute
+  ImpressumRoute: typeof ImpressumRoute
   KontaktRoute: typeof KontaktRoute
+  SitemapRoute: typeof SitemapRoute
   TerminRoute: typeof TerminRoute
   TherapienRoute: typeof TherapienRoute
   UeberUnsRoute: typeof UeberUnsRoute
+  WiderrufRoute: typeof WiderrufRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -151,11 +203,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/datenschutz': {
+      id: '/datenschutz'
+      path: '/datenschutz'
+      fullPath: '/datenschutz'
+      preLoaderRoute: typeof DatenschutzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impressum': {
+      id: '/impressum'
+      path: '/impressum'
+      fullPath: '/impressum'
+      preLoaderRoute: typeof ImpressumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kontakt': {
       id: '/kontakt'
       path: '/kontakt'
       fullPath: '/kontakt'
       preLoaderRoute: typeof KontaktRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap': {
+      id: '/sitemap'
+      path: '/sitemap'
+      fullPath: '/sitemap'
+      preLoaderRoute: typeof SitemapRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/termin': {
@@ -177,6 +250,13 @@ declare module '@tanstack/react-router' {
       path: '/ueber-uns'
       fullPath: '/ueber-uns'
       preLoaderRoute: typeof UeberUnsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/widerruf': {
+      id: '/widerruf'
+      path: '/widerruf'
+      fullPath: '/widerruf'
+      preLoaderRoute: typeof WiderrufRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/praxis': {
@@ -204,10 +284,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  DatenschutzRoute: DatenschutzRoute,
+  ImpressumRoute: ImpressumRoute,
   KontaktRoute: KontaktRoute,
+  SitemapRoute: SitemapRoute,
   TerminRoute: TerminRoute,
   TherapienRoute: TherapienRoute,
   UeberUnsRoute: UeberUnsRoute,
+  WiderrufRoute: WiderrufRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
