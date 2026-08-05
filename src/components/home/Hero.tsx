@@ -9,11 +9,11 @@ export function Hero() {
     <section className="relative overflow-hidden bg-card pb-16 pt-6 sm:pb-20 sm:pt-8 lg:pb-24 lg:pt-10">
       {/* Grosses, dezentes KK-Zeichen im Hintergrund */}
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sand opacity-50"
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-sand opacity-65"
         aria-hidden="true"
       >
-        <svg viewBox="0 0 400 400" fill="none" className="h-auto w-[min(88vw,560px)]">
-          <circle cx="200" cy="200" r="196" stroke="currentColor" strokeWidth="1" />
+        <svg viewBox="0 0 400 400" fill="none" className="h-auto w-[min(110vw,760px)]">
+          <circle cx="200" cy="200" r="196" stroke="currentColor" strokeWidth="1.25" />
           <text
             x="200"
             y="200"
