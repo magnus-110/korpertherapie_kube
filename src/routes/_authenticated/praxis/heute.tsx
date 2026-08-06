@@ -6,6 +6,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { nurTeam } from "@/lib/praxis-guard";
 import { Button } from "@/components/ui/button";
 
+type Termin = {
+  id: string;
+  start: string;
+  ende: string;
+  status: string;
+  ist_intern: boolean;
+  patients: { name: string } | null;
+  appointment_types: { name: string } | null;
+  practitioners: { name: string; farbe: string } | null;
+};
+
 export const Route = createFileRoute("/_authenticated/praxis/heute")({
   beforeLoad: ({ context }) => nurTeam(context.rolle),
   loader: async () => {
@@ -18,14 +29,14 @@ export const Route = createFileRoute("/_authenticated/praxis/heute")({
       .gte("start", startOfDay(jetzt).toISOString())
       .lte("start", endOfDay(jetzt).toISOString())
       .order("start");
-    return { termine: data ?? [] };
+    return { termine: (data ?? []) as unknown as Termin[] };
   },
   head: () => ({ meta: [{ title: "Heute · Praxis Kube" }] }),
   component: HeuteSeite,
 });
 
 function HeuteSeite() {
-  const { termine } = Route.useLoaderData();
+  const { termine } = Route.useLoaderData() as { termine: Termin[] };
   const { behandler } = Route.useRouteContext();
 
   const naechster = termine.find((t) => new Date(t.start) >= new Date()) ?? null;
