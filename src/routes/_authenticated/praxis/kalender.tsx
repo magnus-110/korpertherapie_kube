@@ -10,8 +10,33 @@ import { Button } from "@/components/ui/button";
 import { TerminDialog } from "@/components/praxis/TerminDialog";
 
 const STUNDE_VON = 7;
-const STUNDE_BIS = 19;
+const STUNDE_BIS = 20;
 const ZEILE = 56; // Pixel je Stunde
+
+type Behandler = { id: string; name: string; kuerzel: string | null; farbe: string };
+type Art = { id: string; name: string; practitioner_id: string | null; dauer_minuten: number | null };
+type Patient = { id: string; name: string };
+type Termin = {
+  id: string;
+  start: string;
+  ende: string;
+  status: string;
+  ist_intern: boolean;
+  quelle: string;
+  anliegen: string | null;
+  patient_id: string;
+  type_id: string | null;
+  practitioner_id: string | null;
+  patients: { name: string } | null;
+  appointment_types: { name: string } | null;
+};
+type Daten = {
+  wochenstart: string;
+  termine: Termin[];
+  behandler: Behandler[];
+  arten: Art[];
+  patienten: Patient[];
+};
 
 export const Route = createFileRoute("/_authenticated/praxis/kalender")({
   beforeLoad: ({ context }) => nurTeam(context.rolle),
@@ -49,22 +74,26 @@ export const Route = createFileRoute("/_authenticated/praxis/kalender")({
 
     return {
       wochenstart: start.toISOString(),
-      termine: termine.data ?? [],
-      behandler: behandler.data ?? [],
-      arten: arten.data ?? [],
-      patienten: patienten.data ?? [],
-    };
+      termine: (termine.data ?? []) as unknown as Termin[],
+      behandler: (behandler.data ?? []) as Behandler[],
+      arten: (arten.data ?? []) as Art[],
+      patienten: (patienten.data ?? []) as Patient[],
+    } satisfies Daten;
   },
   head: () => ({ meta: [{ title: "Kalender · Praxis Kube" }] }),
   component: KalenderSeite,
 });
 
 function KalenderSeite() {
-  const daten = Route.useLoaderData();
+  const daten = Route.useLoaderData() as Daten;
   const navigate = Route.useNavigate();
   const router = useRouter();
   const start = new Date(daten.wochenstart);
   const tage = Array.from({ length: 7 }, (_, i) => addDays(start, i));
+  const spalten: Behandler[] =
+    daten.behandler.length > 0
+      ? daten.behandler
+      : [{ id: "ohne", name: "Praxis", kuerzel: null, farbe: "#8FB3A4" }];
 
   const [dialog, setDialog] = useState<{ zeitpunkt?: Date; terminId?: string } | null>(null);
 
@@ -112,7 +141,7 @@ function KalenderSeite() {
       </div>
 
       <div className="mb-4 flex flex-wrap gap-4">
-        {daten.behandler.map((b) => (
+        {spalten.map((b) => (
           <span key={b.id} className="flex items-center gap-2 text-sm text-primary">
             <span
               className="size-3 rounded-full"
@@ -125,7 +154,13 @@ function KalenderSeite() {
       </div>
 
       <div className="overflow-x-auto rounded-2xl bg-card p-3">
-        <div className="grid min-w-[720px] grid-cols-[52px_repeat(7,1fr)] gap-1">
+        <div
+          className="grid gap-1"
+          style={{
+            minWidth: 240 + spalten.length * 7 * 62,
+            gridTemplateColumns: `52px repeat(7, 1fr)`,
+          }}
+        >
           <div />
           {tage.map((t) => {
             const heute = format(t, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
@@ -134,11 +169,19 @@ function KalenderSeite() {
                 <p
                   className={`text-xs ${heute ? "font-bold text-primary" : "text-muted-foreground"}`}
                 >
-                  {format(t, "EEEEEE", { locale: de })}
+                  {format(t, "EEEEEE, d.M.", { locale: de })}
                 </p>
-                <p className={`text-sm ${heute ? "font-bold text-primary" : "text-primary"}`}>
-                  {format(t, "d.M.")}
-                </p>
+                <div className="mt-1 flex gap-1">
+                  {spalten.map((b) => (
+                    <p
+                      key={b.id}
+                      className="flex-1 truncate rounded-md py-0.5 text-[0.62rem] font-semibold text-creme"
+                      style={{ background: b.farbe }}
+                    >
+                      {b.kuerzel ?? b.name.split(" ")[0]}
+                    </p>
+                  ))}
+                </div>
               </div>
             );
           })}
@@ -155,59 +198,63 @@ function KalenderSeite() {
             ))}
           </div>
 
-          {tage.map((tag) => {
-            const tagesTermine = daten.termine.filter(
-              (t) => format(new Date(t.start), "yyyy-MM-dd") === format(tag, "yyyy-MM-dd"),
-            );
-            return (
-              <div
-                key={tag.toISOString()}
-                className="relative rounded-lg bg-background/60"
-                style={{ height: (STUNDE_BIS - STUNDE_VON) * ZEILE }}
-              >
-                {Array.from({ length: STUNDE_BIS - STUNDE_VON }, (_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    className="absolute inset-x-0 border-t border-border/60 transition-colors hover:bg-accent/50"
-                    style={{ top: i * ZEILE, height: ZEILE }}
-                    onClick={() => {
-                      const d = new Date(tag);
-                      d.setHours(STUNDE_VON + i, 0, 0, 0);
-                      setDialog({ zeitpunkt: d });
-                    }}
-                    aria-label={`Termin am ${format(tag, "d.M.")} um ${STUNDE_VON + i} Uhr anlegen`}
-                  />
-                ))}
+          {tage.map((tag) => (
+            <div key={tag.toISOString()} className="flex gap-1">
+              {spalten.map((person) => {
+                const tagesTermine = daten.termine.filter(
+                  (t: Termin) =>
+                    format(new Date(t.start), "yyyy-MM-dd") === format(tag, "yyyy-MM-dd") &&
+                    (person.id === "ohne" || t.practitioner_id === person.id),
+                );
+                return (
+                  <div
+                    key={person.id}
+                    className="relative flex-1 rounded-lg bg-background/60"
+                    style={{ height: (STUNDE_BIS - STUNDE_VON) * ZEILE }}
+                  >
+                    {Array.from({ length: STUNDE_BIS - STUNDE_VON }, (_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        className="absolute inset-x-0 border-t border-border/60 transition-colors hover:bg-accent/50"
+                        style={{ top: i * ZEILE, height: ZEILE }}
+                        onClick={() => {
+                          const d = new Date(tag);
+                          d.setHours(STUNDE_VON + i, 0, 0, 0);
+                          setDialog({ zeitpunkt: d });
+                        }}
+                        aria-label={`Termin bei ${person.name} am ${format(tag, "d.M.")} um ${STUNDE_VON + i} Uhr anlegen`}
+                      />
+                    ))}
 
-                {tagesTermine.map((t) => {
-                  const s = new Date(t.start);
-                  const e = new Date(t.ende);
-                  const top = ((s.getHours() - STUNDE_VON) * 60 + s.getMinutes()) * (ZEILE / 60);
-                  const hoehe = Math.max(
-                    ((e.getTime() - s.getTime()) / 60000) * (ZEILE / 60) - 2,
-                    22,
-                  );
-                  const farbe =
-                    daten.behandler.find((b) => b.id === t.practitioner_id)?.farbe ?? "#8FB3A4";
-                  return (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => setDialog({ terminId: t.id })}
-                      className={`absolute inset-x-0.5 overflow-hidden rounded-md px-2 py-1 text-left text-[0.7rem] leading-tight text-creme transition-opacity hover:opacity-90 ${
-                        t.status === "abgehakt" ? "opacity-60" : ""
-                      }`}
-                      style={{ top, height: hoehe, background: farbe }}
-                    >
-                      <span className="block font-semibold">{format(s, "HH:mm")}</span>
-                      <span className="block truncate">{t.patients?.name ?? "—"}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            );
-          })}
+                    {tagesTermine.map((t: Termin) => {
+                      const s = new Date(t.start);
+                      const e = new Date(t.ende);
+                      const top = ((s.getHours() - STUNDE_VON) * 60 + s.getMinutes()) * (ZEILE / 60);
+                      const hoehe = Math.max(
+                        ((e.getTime() - s.getTime()) / 60000) * (ZEILE / 60) - 2,
+                        22,
+                      );
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => setDialog({ terminId: t.id })}
+                          className={`absolute inset-x-0.5 overflow-hidden rounded-md px-1.5 py-1 text-left text-[0.68rem] leading-tight text-creme transition-opacity hover:opacity-90 ${
+                            t.status === "abgehakt" ? "opacity-60" : ""
+                          }`}
+                          style={{ top, height: hoehe, background: person.farbe }}
+                        >
+                          <span className="block font-semibold">{format(s, "HH:mm")}</span>
+                          <span className="block truncate">{t.patients?.name ?? "—"}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -220,12 +267,12 @@ function KalenderSeite() {
         </p>
       ) : (
         <ul className="grid gap-2">
-          {daten.termine.map((t) => (
+          {daten.termine.map((t: Termin) => (
             <li
               key={t.id}
               className="flex flex-wrap items-center gap-3 rounded-xl bg-card px-4 py-3"
               style={{
-                borderLeft: `3px solid ${daten.behandler.find((b) => b.id === t.practitioner_id)?.farbe ?? "#8FB3A4"}`,
+                borderLeft: `3px solid ${daten.behandler.find((b: Behandler) => b.id === t.practitioner_id)?.farbe ?? "#8FB3A4"}`,
               }}
             >
               <span className="w-32 text-sm text-primary">
@@ -262,7 +309,7 @@ function KalenderSeite() {
       {dialog ? (
         <TerminDialog
           zeitpunkt={dialog.zeitpunkt}
-          termin={daten.termine.find((t) => t.id === dialog.terminId) ?? null}
+          termin={daten.termine.find((t: Termin) => t.id === dialog.terminId) ?? null}
           behandler={daten.behandler}
           arten={daten.arten}
           patienten={daten.patienten}
