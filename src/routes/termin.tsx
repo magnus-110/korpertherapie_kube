@@ -19,6 +19,16 @@ const description =
 
 type Kategorie = "erstbehandlung" | "folgetermin";
 
+type Art = {
+  id: string;
+  name: string;
+  kurztext: string | null;
+  dauer_minuten: number | null;
+  practitioner_id: string | null;
+  art_kategorie: Kategorie;
+};
+type Person = { id: string; name: string; bezeichnung: string | null };
+
 export const Route = createFileRoute("/termin")({
   head: () => ({
     meta: [
@@ -41,7 +51,10 @@ export const Route = createFileRoute("/termin")({
         .order("sortierung"),
       supabase.from("practitioners").select("id, name, bezeichnung").eq("aktiv", true),
     ]);
-    return { arten: arten.data ?? [], behandler: behandler.data ?? [] };
+    return {
+      arten: (arten.data ?? []) as Art[],
+      behandler: (behandler.data ?? []) as Person[],
+    };
   },
   component: TerminSeite,
 });
