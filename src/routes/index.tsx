@@ -3,6 +3,7 @@ import { Activity, ArrowRight, Brain, FlaskConical, Hand } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { CtaBand } from "@/components/site/CtaBand";
 import { Hero } from "@/components/home/Hero";
+import { BuchungsTeaser } from "@/components/home/BuchungsTeaser";
 import { Approach } from "@/components/home/Approach";
 import { Button } from "@/components/ui/button";
 import { praxis } from "@/lib/praxis";
@@ -77,6 +78,8 @@ function Index() {
   return (
     <SiteLayout>
       <Hero />
+
+      <BuchungsTeaser />
 
       <section className="py-14 sm:py-20">
         <div className="mx-auto grid max-w-[1140px] items-center gap-10 px-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
