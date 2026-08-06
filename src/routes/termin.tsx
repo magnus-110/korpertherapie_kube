@@ -60,7 +60,7 @@ export const Route = createFileRoute("/termin")({
 });
 
 function TerminSeite() {
-  const { arten, behandler } = Route.useLoaderData();
+  const { arten, behandler } = Route.useLoaderData() as { arten: Art[]; behandler: Person[] };
   const [kategorie, setKategorie] = useState<Kategorie | null>(null);
   const [artId, setArtId] = useState<string | null>(null);
   const [slots, setSlots] = useState<Slot[] | null>(null);
