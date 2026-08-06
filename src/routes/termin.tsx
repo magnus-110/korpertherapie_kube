@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { addDays, format, parseISO } from "date-fns";
 import { de } from "date-fns/locale";
-import { ArrowLeft, Check, Clock, Loader2, Phone } from "lucide-react";
+import { ArrowLeft, Check, Clock, Loader2, Phone, Sparkles, Repeat } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero } from "@/components/site/PageHero";
+import { WochenKalender, type Slot } from "@/components/site/WochenKalender";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,9 @@ import { praxis } from "@/lib/praxis";
 
 const title = "Termin buchen | Praxis Kube Gersthofen";
 const description =
-  "Buche deinen Termin in der Privatpraxis Kube in Gersthofen online: Behandlung wählen, freie Zeit aussuchen, fertig.";
+  "Buche deinen Termin in der Privatpraxis Kube in Gersthofen online: Erstbehandlung oder Folgetermin wählen, Behandlung aussuchen, freie Zeit im Kalender anklicken.";
+
+type Kategorie = "erstbehandlung" | "folgetermin";
 
 export const Route = createFileRoute("/termin")({
   head: () => ({
@@ -32,7 +35,7 @@ export const Route = createFileRoute("/termin")({
     const [arten, behandler] = await Promise.all([
       supabase
         .from("appointment_types")
-        .select("id, name, kurztext, dauer_minuten, practitioner_id")
+        .select("id, name, kurztext, dauer_minuten, practitioner_id, art_kategorie")
         .eq("aktiv", true)
         .eq("online_buchbar", true)
         .order("sortierung"),
@@ -43,10 +46,9 @@ export const Route = createFileRoute("/termin")({
   component: TerminSeite,
 });
 
-type Slot = { start_zeit: string; end_zeit: string };
-
 function TerminSeite() {
   const { arten, behandler } = Route.useLoaderData();
+  const [kategorie, setKategorie] = useState<Kategorie | null>(null);
   const [artId, setArtId] = useState<string | null>(null);
   const [slots, setSlots] = useState<Slot[] | null>(null);
   const [gewaehlt, setGewaehlt] = useState<string | null>(null);
@@ -62,6 +64,12 @@ function TerminSeite() {
   const [zustimmung, setZustimmung] = useState(false);
 
   const art = arten.find((a) => a.id === artId) ?? null;
+  const person = behandler.find((b) => b.id === art?.practitioner_id) ?? null;
+
+  const passende = useMemo(
+    () => arten.filter((a) => (kategorie ? a.art_kategorie === kategorie : true)),
+    [arten, kategorie],
+  );
 
   useEffect(() => {
     if (!artId) return;
@@ -73,7 +81,7 @@ function TerminSeite() {
       .rpc("freie_zeiten", {
         _behandlungsart: artId,
         _von: format(heute, "yyyy-MM-dd"),
-        _bis: format(addDays(heute, 42), "yyyy-MM-dd"),
+        _bis: format(addDays(heute, 90), "yyyy-MM-dd"),
       })
       .then(({ data }) => {
         if (!abgebrochen) {
@@ -86,15 +94,6 @@ function TerminSeite() {
     };
   }, [artId]);
 
-  const nachTagen = useMemo(() => {
-    const karte = new Map<string, Slot[]>();
-    for (const s of slots ?? []) {
-      const tag = format(parseISO(s.start_zeit), "yyyy-MM-dd");
-      karte.set(tag, [...(karte.get(tag) ?? []), s]);
-    }
-    return [...karte.entries()].slice(0, 14);
-  }, [slots]);
-
   async function buchen() {
     if (!artId || !gewaehlt) return;
     setSendet(true);
@@ -104,8 +103,8 @@ function TerminSeite() {
       _start: gewaehlt,
       _name: name,
       _email: email,
-      _telefon: telefon || null,
-      _anliegen: anliegen || null,
+      _telefon: telefon,
+      _anliegen: anliegen,
     });
     setSendet(false);
     if (error) {
@@ -114,6 +113,8 @@ function TerminSeite() {
     }
     setFertig(true);
   }
+
+  const schritt = !kategorie ? 1 : !art ? 2 : 3;
 
   if (fertig && art) {
     return (
@@ -146,48 +147,131 @@ function TerminSeite() {
 
   return (
     <SiteLayout>
-      <PageHero eyebrow="Termin buchen" title="In zwei Schritten zum Termin">
+      <PageHero eyebrow="Termin buchen" title="In drei Schritten zum Termin">
         <p>
-          Wähle zuerst die Behandlung. Danach zeigen wir dir die freien Zeiten der zuständigen
-          Person.
+          Erst sagst du uns, ob du neu bei uns bist. Dann wählst du die Behandlung – und zum Schluss
+          suchst du dir im Kalender eine freie Zeit aus.
         </p>
       </PageHero>
 
       <section className="py-14 sm:py-20">
-        <div className="mx-auto max-w-[900px] px-5 sm:px-8">
-          {!art ? (
+        <div className="mx-auto max-w-[980px] px-5 sm:px-8">
+          <ol className="mb-8 flex flex-wrap gap-2" aria-label="Fortschritt">
+            {["Anlass", "Behandlung", "Termin im Kalender"].map((label, i) => (
+              <li
+                key={label}
+                className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm ${
+                  schritt === i + 1
+                    ? "bg-primary font-semibold text-primary-foreground"
+                    : schritt > i + 1
+                      ? "bg-sage/35 text-primary"
+                      : "bg-card text-muted-foreground"
+                }`}
+                aria-current={schritt === i + 1 ? "step" : undefined}
+              >
+                <span className="text-xs">{i + 1}</span> {label}
+              </li>
+            ))}
+          </ol>
+
+          {schritt === 1 ? (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {(
+                [
+                  {
+                    wert: "erstbehandlung" as const,
+                    icon: Sparkles,
+                    titel: "Erstbehandlung",
+                    text: "Du kommst zum ersten Mal zu uns. Wir nehmen uns extra Zeit für deine Geschichte.",
+                  },
+                  {
+                    wert: "folgetermin" as const,
+                    icon: Repeat,
+                    titel: "Folgetermin",
+                    text: "Du warst schon bei uns und möchtest die Behandlung fortsetzen.",
+                  },
+                ] satisfies {
+                  wert: Kategorie;
+                  icon: typeof Sparkles;
+                  titel: string;
+                  text: string;
+                }[]
+              ).map(({ wert, icon: Icon, titel, text }) => (
+                <button
+                  key={wert}
+                  type="button"
+                  onClick={() => {
+                    setKategorie(wert);
+                    setArtId(null);
+                    setGewaehlt(null);
+                  }}
+                  className="rounded-3xl bg-card p-7 text-left shadow-[var(--shadow-soft-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft-md)]"
+                >
+                  <span className="mb-4 grid size-11 place-items-center rounded-full bg-sage/30 text-primary">
+                    <Icon className="size-5" aria-hidden="true" />
+                  </span>
+                  <p className="font-display text-xl text-primary">{titel}</p>
+                  <p className="mt-2 text-[0.95rem] text-muted-foreground">{text}</p>
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {schritt === 2 ? (
             <>
-              <p className="eyebrow mb-5">Schritt 1 von 2 · Behandlung wählen</p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {arten.map((a) => {
-                  const person = behandler.find((b) => b.id === a.practitioner_id);
-                  return (
-                    <button
-                      key={a.id}
-                      type="button"
-                      onClick={() => {
-                        setArtId(a.id);
-                        setGewaehlt(null);
-                      }}
-                      className="rounded-2xl bg-card p-6 text-left shadow-[var(--shadow-soft-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft-md)]"
-                    >
-                      <p className="font-display text-lg text-primary">{a.name}</p>
-                      {a.kurztext ? (
-                        <p className="mt-2 text-[0.92rem] text-muted-foreground">{a.kurztext}</p>
-                      ) : null}
-                      <p className="mt-4 flex items-center gap-3 text-xs text-secondary">
-                        <span className="inline-flex items-center gap-1.5">
-                          <Clock className="size-3.5" aria-hidden="true" />
-                          {a.dauer_minuten ?? 60} Minuten
-                        </span>
-                        {person ? <span>· bei {person.name}</span> : null}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
+              <button
+                type="button"
+                onClick={() => setKategorie(null)}
+                className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-secondary underline-offset-4 hover:underline"
+              >
+                <ArrowLeft className="size-4" aria-hidden="true" /> Zurück
+              </button>
+
+              {passende.length === 0 ? (
+                <div className="rounded-2xl bg-card p-6">
+                  <p className="text-primary">
+                    Für diesen Anlass ist gerade keine Behandlung online buchbar.
+                  </p>
+                  <Button asChild variant="pill" size="pill" className="mt-4">
+                    <a href={praxis.telefonHref}>
+                      <Phone className="size-4" aria-hidden="true" /> {praxis.telefon}
+                    </a>
+                  </Button>
+                </div>
+              ) : (
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {passende.map((a) => {
+                    const wer = behandler.find((b) => b.id === a.practitioner_id);
+                    return (
+                      <button
+                        key={a.id}
+                        type="button"
+                        onClick={() => {
+                          setArtId(a.id);
+                          setGewaehlt(null);
+                        }}
+                        className="rounded-2xl bg-card p-6 text-left shadow-[var(--shadow-soft-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft-md)]"
+                      >
+                        <p className="font-display text-lg text-primary">{a.name}</p>
+                        {a.kurztext ? (
+                          <p className="mt-2 text-[0.92rem] text-muted-foreground">{a.kurztext}</p>
+                        ) : null}
+                        <p className="mt-4 flex flex-wrap items-center gap-3 text-xs text-secondary">
+                          <span className="inline-flex items-center gap-1.5">
+                            <Clock className="size-3.5" aria-hidden="true" />
+                            {a.dauer_minuten ?? 60} Minuten
+                          </span>
+                          {wer ? <span>· bei {wer.name}</span> : null}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </>
-          ) : (
+          ) : null}
+
+          {schritt === 3 && art ? (
             <>
               <button
                 type="button"
@@ -200,22 +284,19 @@ function TerminSeite() {
                 <ArrowLeft className="size-4" aria-hidden="true" /> Andere Behandlung wählen
               </button>
 
-              <div className="mb-8 rounded-2xl bg-card px-5 py-4">
+              <div className="mb-6 rounded-2xl bg-card px-5 py-4">
                 <p className="font-display text-lg text-primary">{art.name}</p>
                 <p className="mt-1 text-sm text-secondary">
-                  {behandler.find((b) => b.id === art.practitioner_id)?.name} ·{" "}
-                  {art.dauer_minuten ?? 60} Minuten
+                  {person?.name ?? "Praxis Kube"} · {art.dauer_minuten ?? 60} Minuten
                 </p>
               </div>
-
-              <p className="eyebrow mb-5">Schritt 2 von 2 · Zeit wählen</p>
 
               {laedt ? (
                 <p className="flex items-center gap-2 text-muted-foreground">
                   <Loader2 className="size-4 animate-spin" aria-hidden="true" /> Freie Zeiten werden
                   geladen …
                 </p>
-              ) : nachTagen.length === 0 ? (
+              ) : (slots ?? []).length === 0 ? (
                 <div className="rounded-2xl bg-card p-6">
                   <p className="text-primary">
                     Für diese Behandlung sind gerade keine Zeiten online buchbar.
@@ -227,31 +308,12 @@ function TerminSeite() {
                   </Button>
                 </div>
               ) : (
-                <div className="grid gap-4">
-                  {nachTagen.map(([tag, tagesSlots]) => (
-                    <div key={tag} className="rounded-2xl bg-card p-5">
-                      <p className="mb-3 font-display text-base text-primary">
-                        {format(parseISO(tag), "EEEE, d. MMMM", { locale: de })}
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {tagesSlots.map((s) => (
-                          <button
-                            key={s.start_zeit}
-                            type="button"
-                            onClick={() => setGewaehlt(s.start_zeit)}
-                            className={`rounded-full px-4 py-2 text-sm transition-colors ${
-                              gewaehlt === s.start_zeit
-                                ? "bg-primary font-semibold text-primary-foreground"
-                                : "bg-sage/25 text-primary hover:bg-sage/45"
-                            }`}
-                          >
-                            {format(parseISO(s.start_zeit), "HH:mm")}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <WochenKalender
+                  slots={slots ?? []}
+                  spalte={person?.name ?? "Freie Zeiten"}
+                  gewaehlt={gewaehlt}
+                  onWaehlen={setGewaehlt}
+                />
               )}
 
               {gewaehlt ? (
@@ -295,7 +357,7 @@ function TerminSeite() {
                       />
                     </div>
                     <div className="sm:col-span-2">
-                      <Label htmlFor="anliegen">Dein Anliegen (optional)</Label>
+                      <Label htmlFor="anliegen">Dein Anliegen</Label>
                       <Textarea
                         id="anliegen"
                         value={anliegen}
@@ -345,7 +407,7 @@ function TerminSeite() {
                 </div>
               ) : null}
             </>
-          )}
+          ) : null}
         </div>
       </section>
     </SiteLayout>
