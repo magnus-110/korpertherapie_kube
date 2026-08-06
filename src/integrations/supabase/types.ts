@@ -17,6 +17,7 @@ export type Database = {
       appointment_types: {
         Row: {
           aktiv: boolean
+          art_kategorie: Database["public"]["Enums"]["appointment_kind"]
           behandler_id: string | null
           beschreibung: string | null
           created_at: string
@@ -33,6 +34,7 @@ export type Database = {
         }
         Insert: {
           aktiv?: boolean
+          art_kategorie?: Database["public"]["Enums"]["appointment_kind"]
           behandler_id?: string | null
           beschreibung?: string | null
           created_at?: string
@@ -49,6 +51,7 @@ export type Database = {
         }
         Update: {
           aktiv?: boolean
+          art_kategorie?: Database["public"]["Enums"]["appointment_kind"]
           behandler_id?: string | null
           beschreibung?: string | null
           created_at?: string
@@ -628,6 +631,7 @@ export type Database = {
     }
     Enums: {
       app_role: "verwaltung" | "behandler" | "patient"
+      appointment_kind: "erstbehandlung" | "folgetermin"
       appointment_source: "online" | "manuell" | "telefon"
       appointment_status: "geplant" | "abgehakt"
       availability_mode: "offen" | "zu"
@@ -765,6 +769,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["verwaltung", "behandler", "patient"],
+      appointment_kind: ["erstbehandlung", "folgetermin"],
       appointment_source: ["online", "manuell", "telefon"],
       appointment_status: ["geplant", "abgehakt"],
       availability_mode: ["offen", "zu"],
