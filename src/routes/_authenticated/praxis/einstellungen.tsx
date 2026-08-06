@@ -114,7 +114,10 @@ function BehandlerBlock({ behandler, erledigt }: { behandler: Behandler[]; erled
   const [farbe, setFarbe] = useState("#3D6B62");
 
   async function anlegen() {
-    if (name.trim().length < 2) return toast.error("Bitte einen Namen eingeben");
+    if (name.trim().length < 2) {
+      toast.error("Bitte einen Namen eingeben");
+      return;
+    }
     const { error } = await supabase
       .from("practitioners")
       .insert({ name: name.trim(), kuerzel: kuerzel.trim() || null, farbe });
@@ -205,7 +208,10 @@ function ArtenBlock({
   const [kategorie, setKategorie] = useState<"erstbehandlung" | "folgetermin">("erstbehandlung");
 
   async function anlegen() {
-    if (name.trim().length < 2) return toast.error("Bitte einen Namen eingeben");
+    if (name.trim().length < 2) {
+      toast.error("Bitte einen Namen eingeben");
+      return;
+    }
     const { error } = await supabase.from("appointment_types").insert({
       name: name.trim(),
       kurztext: kurztext.trim() || null,
@@ -343,7 +349,10 @@ function ZeitenBlock({
   const [bis, setBis] = useState("17:00");
 
   async function anlegen() {
-    if (!personId) return toast.error("Bitte einen Behandler wählen");
+    if (!personId) {
+      toast.error("Bitte einen Behandler wählen");
+      return;
+    }
     const { error } = await supabase.from("availability_rules").insert({
       practitioner_id: personId,
       wochentag: Number(tag),
