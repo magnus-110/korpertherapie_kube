@@ -20,7 +20,19 @@ import { Route as TerminRouteImport } from './routes/termin'
 import { Route as TherapienRouteImport } from './routes/therapien'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
 import { Route as WiderrufRouteImport } from './routes/widerruf'
-import { Route as AuthenticatedPraxisRouteImport } from './routes/_authenticated/praxis'
+import { Route as AuthenticatedPraxisRouteRouteImport } from './routes/_authenticated/praxis/route'
+import { Route as AuthenticatedPraxisIndexRouteImport } from './routes/_authenticated/praxis/index'
+import { Route as AuthenticatedPraxisAnfragenRouteImport } from './routes/_authenticated/praxis/anfragen'
+import { Route as AuthenticatedPraxisEinstellungenRouteImport } from './routes/_authenticated/praxis/einstellungen'
+import { Route as AuthenticatedPraxisHeuteRouteImport } from './routes/_authenticated/praxis/heute'
+import { Route as AuthenticatedPraxisKalenderRouteImport } from './routes/_authenticated/praxis/kalender'
+import { Route as AuthenticatedPraxisMahnungenRouteImport } from './routes/_authenticated/praxis/mahnungen'
+import { Route as AuthenticatedPraxisNewsletterRouteImport } from './routes/_authenticated/praxis/newsletter'
+import { Route as AuthenticatedPraxisPatientenRouteImport } from './routes/_authenticated/praxis/patienten'
+import { Route as AuthenticatedPraxisRechnungenRouteImport } from './routes/_authenticated/praxis/rechnungen'
+import { Route as AuthenticatedPraxisSucheRouteImport } from './routes/_authenticated/praxis/suche'
+import { Route as AuthenticatedPraxisUebersichtRouteImport } from './routes/_authenticated/praxis/uebersicht'
+import { Route as AuthenticatedPraxisZahlungenRouteImport } from './routes/_authenticated/praxis/zahlungen'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,11 +88,84 @@ const WiderrufRoute = WiderrufRouteImport.update({
   path: '/widerruf',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPraxisRoute = AuthenticatedPraxisRouteImport.update({
-  id: '/praxis',
-  path: '/praxis',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
+const AuthenticatedPraxisRouteRoute =
+  AuthenticatedPraxisRouteRouteImport.update({
+    id: '/praxis',
+    path: '/praxis',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPraxisIndexRoute =
+  AuthenticatedPraxisIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisAnfragenRoute =
+  AuthenticatedPraxisAnfragenRouteImport.update({
+    id: '/anfragen',
+    path: '/anfragen',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisEinstellungenRoute =
+  AuthenticatedPraxisEinstellungenRouteImport.update({
+    id: '/einstellungen',
+    path: '/einstellungen',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisHeuteRoute =
+  AuthenticatedPraxisHeuteRouteImport.update({
+    id: '/heute',
+    path: '/heute',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisKalenderRoute =
+  AuthenticatedPraxisKalenderRouteImport.update({
+    id: '/kalender',
+    path: '/kalender',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisMahnungenRoute =
+  AuthenticatedPraxisMahnungenRouteImport.update({
+    id: '/mahnungen',
+    path: '/mahnungen',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisNewsletterRoute =
+  AuthenticatedPraxisNewsletterRouteImport.update({
+    id: '/newsletter',
+    path: '/newsletter',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisPatientenRoute =
+  AuthenticatedPraxisPatientenRouteImport.update({
+    id: '/patienten',
+    path: '/patienten',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisRechnungenRoute =
+  AuthenticatedPraxisRechnungenRouteImport.update({
+    id: '/rechnungen',
+    path: '/rechnungen',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisSucheRoute =
+  AuthenticatedPraxisSucheRouteImport.update({
+    id: '/suche',
+    path: '/suche',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisUebersichtRoute =
+  AuthenticatedPraxisUebersichtRouteImport.update({
+    id: '/uebersicht',
+    path: '/uebersicht',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisZahlungenRoute =
+  AuthenticatedPraxisZahlungenRouteImport.update({
+    id: '/zahlungen',
+    path: '/zahlungen',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -93,7 +178,19 @@ export interface FileRoutesByFullPath {
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/widerruf': typeof WiderrufRoute
-  '/praxis': typeof AuthenticatedPraxisRoute
+  '/praxis': typeof AuthenticatedPraxisRouteRouteWithChildren
+  '/praxis/anfragen': typeof AuthenticatedPraxisAnfragenRoute
+  '/praxis/einstellungen': typeof AuthenticatedPraxisEinstellungenRoute
+  '/praxis/heute': typeof AuthenticatedPraxisHeuteRoute
+  '/praxis/kalender': typeof AuthenticatedPraxisKalenderRoute
+  '/praxis/mahnungen': typeof AuthenticatedPraxisMahnungenRoute
+  '/praxis/newsletter': typeof AuthenticatedPraxisNewsletterRoute
+  '/praxis/patienten': typeof AuthenticatedPraxisPatientenRoute
+  '/praxis/rechnungen': typeof AuthenticatedPraxisRechnungenRoute
+  '/praxis/suche': typeof AuthenticatedPraxisSucheRoute
+  '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
+  '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
+  '/praxis/': typeof AuthenticatedPraxisIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -106,7 +203,18 @@ export interface FileRoutesByTo {
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/widerruf': typeof WiderrufRoute
-  '/praxis': typeof AuthenticatedPraxisRoute
+  '/praxis/anfragen': typeof AuthenticatedPraxisAnfragenRoute
+  '/praxis/einstellungen': typeof AuthenticatedPraxisEinstellungenRoute
+  '/praxis/heute': typeof AuthenticatedPraxisHeuteRoute
+  '/praxis/kalender': typeof AuthenticatedPraxisKalenderRoute
+  '/praxis/mahnungen': typeof AuthenticatedPraxisMahnungenRoute
+  '/praxis/newsletter': typeof AuthenticatedPraxisNewsletterRoute
+  '/praxis/patienten': typeof AuthenticatedPraxisPatientenRoute
+  '/praxis/rechnungen': typeof AuthenticatedPraxisRechnungenRoute
+  '/praxis/suche': typeof AuthenticatedPraxisSucheRoute
+  '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
+  '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
+  '/praxis': typeof AuthenticatedPraxisIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,7 +229,19 @@ export interface FileRoutesById {
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/widerruf': typeof WiderrufRoute
-  '/_authenticated/praxis': typeof AuthenticatedPraxisRoute
+  '/_authenticated/praxis': typeof AuthenticatedPraxisRouteRouteWithChildren
+  '/_authenticated/praxis/anfragen': typeof AuthenticatedPraxisAnfragenRoute
+  '/_authenticated/praxis/einstellungen': typeof AuthenticatedPraxisEinstellungenRoute
+  '/_authenticated/praxis/heute': typeof AuthenticatedPraxisHeuteRoute
+  '/_authenticated/praxis/kalender': typeof AuthenticatedPraxisKalenderRoute
+  '/_authenticated/praxis/mahnungen': typeof AuthenticatedPraxisMahnungenRoute
+  '/_authenticated/praxis/newsletter': typeof AuthenticatedPraxisNewsletterRoute
+  '/_authenticated/praxis/patienten': typeof AuthenticatedPraxisPatientenRoute
+  '/_authenticated/praxis/rechnungen': typeof AuthenticatedPraxisRechnungenRoute
+  '/_authenticated/praxis/suche': typeof AuthenticatedPraxisSucheRoute
+  '/_authenticated/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
+  '/_authenticated/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
+  '/_authenticated/praxis/': typeof AuthenticatedPraxisIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +257,18 @@ export interface FileRouteTypes {
     | '/ueber-uns'
     | '/widerruf'
     | '/praxis'
+    | '/praxis/anfragen'
+    | '/praxis/einstellungen'
+    | '/praxis/heute'
+    | '/praxis/kalender'
+    | '/praxis/mahnungen'
+    | '/praxis/newsletter'
+    | '/praxis/patienten'
+    | '/praxis/rechnungen'
+    | '/praxis/suche'
+    | '/praxis/uebersicht'
+    | '/praxis/zahlungen'
+    | '/praxis/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -149,6 +281,17 @@ export interface FileRouteTypes {
     | '/therapien'
     | '/ueber-uns'
     | '/widerruf'
+    | '/praxis/anfragen'
+    | '/praxis/einstellungen'
+    | '/praxis/heute'
+    | '/praxis/kalender'
+    | '/praxis/mahnungen'
+    | '/praxis/newsletter'
+    | '/praxis/patienten'
+    | '/praxis/rechnungen'
+    | '/praxis/suche'
+    | '/praxis/uebersicht'
+    | '/praxis/zahlungen'
     | '/praxis'
   id:
     | '__root__'
@@ -164,6 +307,18 @@ export interface FileRouteTypes {
     | '/ueber-uns'
     | '/widerruf'
     | '/_authenticated/praxis'
+    | '/_authenticated/praxis/anfragen'
+    | '/_authenticated/praxis/einstellungen'
+    | '/_authenticated/praxis/heute'
+    | '/_authenticated/praxis/kalender'
+    | '/_authenticated/praxis/mahnungen'
+    | '/_authenticated/praxis/newsletter'
+    | '/_authenticated/praxis/patienten'
+    | '/_authenticated/praxis/rechnungen'
+    | '/_authenticated/praxis/suche'
+    | '/_authenticated/praxis/uebersicht'
+    | '/_authenticated/praxis/zahlungen'
+    | '/_authenticated/praxis/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -263,18 +418,139 @@ declare module '@tanstack/react-router' {
       id: '/_authenticated/praxis'
       path: '/praxis'
       fullPath: '/praxis'
-      preLoaderRoute: typeof AuthenticatedPraxisRouteImport
+      preLoaderRoute: typeof AuthenticatedPraxisRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/praxis/': {
+      id: '/_authenticated/praxis/'
+      path: '/'
+      fullPath: '/praxis/'
+      preLoaderRoute: typeof AuthenticatedPraxisIndexRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/anfragen': {
+      id: '/_authenticated/praxis/anfragen'
+      path: '/anfragen'
+      fullPath: '/praxis/anfragen'
+      preLoaderRoute: typeof AuthenticatedPraxisAnfragenRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/einstellungen': {
+      id: '/_authenticated/praxis/einstellungen'
+      path: '/einstellungen'
+      fullPath: '/praxis/einstellungen'
+      preLoaderRoute: typeof AuthenticatedPraxisEinstellungenRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/heute': {
+      id: '/_authenticated/praxis/heute'
+      path: '/heute'
+      fullPath: '/praxis/heute'
+      preLoaderRoute: typeof AuthenticatedPraxisHeuteRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/kalender': {
+      id: '/_authenticated/praxis/kalender'
+      path: '/kalender'
+      fullPath: '/praxis/kalender'
+      preLoaderRoute: typeof AuthenticatedPraxisKalenderRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/mahnungen': {
+      id: '/_authenticated/praxis/mahnungen'
+      path: '/mahnungen'
+      fullPath: '/praxis/mahnungen'
+      preLoaderRoute: typeof AuthenticatedPraxisMahnungenRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/newsletter': {
+      id: '/_authenticated/praxis/newsletter'
+      path: '/newsletter'
+      fullPath: '/praxis/newsletter'
+      preLoaderRoute: typeof AuthenticatedPraxisNewsletterRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/patienten': {
+      id: '/_authenticated/praxis/patienten'
+      path: '/patienten'
+      fullPath: '/praxis/patienten'
+      preLoaderRoute: typeof AuthenticatedPraxisPatientenRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/rechnungen': {
+      id: '/_authenticated/praxis/rechnungen'
+      path: '/rechnungen'
+      fullPath: '/praxis/rechnungen'
+      preLoaderRoute: typeof AuthenticatedPraxisRechnungenRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/suche': {
+      id: '/_authenticated/praxis/suche'
+      path: '/suche'
+      fullPath: '/praxis/suche'
+      preLoaderRoute: typeof AuthenticatedPraxisSucheRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/uebersicht': {
+      id: '/_authenticated/praxis/uebersicht'
+      path: '/uebersicht'
+      fullPath: '/praxis/uebersicht'
+      preLoaderRoute: typeof AuthenticatedPraxisUebersichtRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/zahlungen': {
+      id: '/_authenticated/praxis/zahlungen'
+      path: '/zahlungen'
+      fullPath: '/praxis/zahlungen'
+      preLoaderRoute: typeof AuthenticatedPraxisZahlungenRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
   }
 }
 
+interface AuthenticatedPraxisRouteRouteChildren {
+  AuthenticatedPraxisAnfragenRoute: typeof AuthenticatedPraxisAnfragenRoute
+  AuthenticatedPraxisEinstellungenRoute: typeof AuthenticatedPraxisEinstellungenRoute
+  AuthenticatedPraxisHeuteRoute: typeof AuthenticatedPraxisHeuteRoute
+  AuthenticatedPraxisKalenderRoute: typeof AuthenticatedPraxisKalenderRoute
+  AuthenticatedPraxisMahnungenRoute: typeof AuthenticatedPraxisMahnungenRoute
+  AuthenticatedPraxisNewsletterRoute: typeof AuthenticatedPraxisNewsletterRoute
+  AuthenticatedPraxisPatientenRoute: typeof AuthenticatedPraxisPatientenRoute
+  AuthenticatedPraxisRechnungenRoute: typeof AuthenticatedPraxisRechnungenRoute
+  AuthenticatedPraxisSucheRoute: typeof AuthenticatedPraxisSucheRoute
+  AuthenticatedPraxisUebersichtRoute: typeof AuthenticatedPraxisUebersichtRoute
+  AuthenticatedPraxisZahlungenRoute: typeof AuthenticatedPraxisZahlungenRoute
+  AuthenticatedPraxisIndexRoute: typeof AuthenticatedPraxisIndexRoute
+}
+
+const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildren =
+  {
+    AuthenticatedPraxisAnfragenRoute: AuthenticatedPraxisAnfragenRoute,
+    AuthenticatedPraxisEinstellungenRoute:
+      AuthenticatedPraxisEinstellungenRoute,
+    AuthenticatedPraxisHeuteRoute: AuthenticatedPraxisHeuteRoute,
+    AuthenticatedPraxisKalenderRoute: AuthenticatedPraxisKalenderRoute,
+    AuthenticatedPraxisMahnungenRoute: AuthenticatedPraxisMahnungenRoute,
+    AuthenticatedPraxisNewsletterRoute: AuthenticatedPraxisNewsletterRoute,
+    AuthenticatedPraxisPatientenRoute: AuthenticatedPraxisPatientenRoute,
+    AuthenticatedPraxisRechnungenRoute: AuthenticatedPraxisRechnungenRoute,
+    AuthenticatedPraxisSucheRoute: AuthenticatedPraxisSucheRoute,
+    AuthenticatedPraxisUebersichtRoute: AuthenticatedPraxisUebersichtRoute,
+    AuthenticatedPraxisZahlungenRoute: AuthenticatedPraxisZahlungenRoute,
+    AuthenticatedPraxisIndexRoute: AuthenticatedPraxisIndexRoute,
+  }
+
+const AuthenticatedPraxisRouteRouteWithChildren =
+  AuthenticatedPraxisRouteRoute._addFileChildren(
+    AuthenticatedPraxisRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedPraxisRoute: typeof AuthenticatedPraxisRoute
+  AuthenticatedPraxisRouteRoute: typeof AuthenticatedPraxisRouteRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedPraxisRoute: AuthenticatedPraxisRoute,
+  AuthenticatedPraxisRouteRoute: AuthenticatedPraxisRouteRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
