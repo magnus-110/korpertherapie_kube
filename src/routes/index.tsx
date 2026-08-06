@@ -3,7 +3,6 @@ import { Activity, ArrowRight, Brain, FlaskConical, Hand } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { CtaBand } from "@/components/site/CtaBand";
 import { Hero } from "@/components/home/Hero";
-import { BookingTeaser } from "@/components/home/BookingTeaser";
 import { Approach } from "@/components/home/Approach";
 import { Button } from "@/components/ui/button";
 import { praxis } from "@/lib/praxis";
@@ -108,8 +107,6 @@ function Index() {
 
       <Approach />
 
-      <BookingTeaser />
-
       <section className="bg-card py-14 sm:py-20 lg:py-24">
         <div className="mx-auto max-w-[1140px] px-5 sm:px-8">
           <div className="mb-10 max-w-[60ch]">
@@ -171,7 +168,7 @@ function Index() {
         />
         <div className="relative mx-auto max-w-[1140px] px-5 sm:px-8">
           <p className="max-w-[22ch] font-display text-[clamp(1.6rem,3.6vw,2.7rem)] font-medium leading-snug text-secondary-foreground">
-            „Gesundheit ist kein Zustand, sondern ein Gleichgewicht."
+            „Gesundheit ist kein Zustand, sondern ein Gleichgewicht.“
           </p>
           <p className="mt-5 max-w-[50ch] text-lg text-sage-tint">
             Wir helfen dir, es zu finden – mit Fachwissen, Zeit und einem ehrlichen Miteinander.
