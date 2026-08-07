@@ -99,25 +99,11 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
     };
   }, [artId]);
 
-  async function buchen() {
-    if (!artId || !gewaehlt) return;
-    setSendet(true);
-    setFehler(null);
-    const { error } = await supabase.rpc("termin_buchen", {
-      _behandlungsart: artId,
-      _start: gewaehlt,
-      _name: name,
-      _email: email,
-      _telefon: telefon,
-      _anliegen: anliegen,
-    });
-    setSendet(false);
-    if (error) {
-      setFehler(error.message.replace(/^.*?:\s*/, ""));
-      return;
-    }
-    setFertig(true);
+  function slotGewaehlt(start: string) {
+    setGewaehlt(start);
+    setDialogOffen(true);
   }
+
 
   const schritt = !kategorie ? 1 : !art ? 2 : 3;
 
