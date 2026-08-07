@@ -1,8 +1,24 @@
 import { Link } from "@tanstack/react-router";
-import { Lock, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Lock, Menu, UserRound } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+/** Merkt sich, ob gerade jemand angemeldet ist – für die Beschriftung oben rechts. */
+function useAngemeldet() {
+  const [angemeldet, setAngemeldet] = useState(false);
+  useEffect(() => {
+    void supabase.auth.getUser().then(({ data }) => setAngemeldet(Boolean(data.user)));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) =>
+      setAngemeldet(Boolean(session?.user)),
+    );
+    return () => sub.subscription.unsubscribe();
+  }, []);
+  return angemeldet;
+}
+
 
 const links = [
   { to: "/", label: "Startseite" },
