@@ -18,7 +18,8 @@ Klick auf Zeit
 
 - Kopf des Pop-ups zeigt immer Behandlung, Behandler:in, Datum und Uhrzeit.
 - Konto anlegen fragt: Name, E-Mail, Passwort, Telefon, Geburtsdatum, Straße, PLZ, Ort.
-- Anmelden fragt E-Mail und Passwort, dazu ein Link „Passwort vergessen“.
+- Anmelden fragt nur E-Mail und Passwort, dazu ein Link „Passwort vergessen“.
+- Wichtig: Die Anmeldung im Pop-up leitet nirgendwohin weiter. Der Nutzer bleibt auf der Seite, das Pop-up springt direkt zum Buchungsabschluss.
 - Nach erfolgreicher Buchung: Bestätigung im Pop-up, danach schließt es und der Wizard zeigt den Erfolgszustand.
 - Fehler (Zeit inzwischen vergeben, falsches Passwort, E-Mail bereits vergeben) werden im Pop-up angezeigt, der gewählte Slot bleibt erhalten.
 
@@ -29,10 +30,19 @@ Klick auf Zeit
 - Neue Konten erhalten die Rolle „Patient“ – kein Zugriff auf den Praxisbereich.
 - Team-Konten (Sabrina, Björn) können sich hier ebenfalls anmelden und für sich selbst buchen; ihre Rechte ändern sich nicht.
 
-## Nach dem Login sichtbar
+## Zwei Wege in denselben Account
 
-- Der Kopfbereich der Website zeigt bei angemeldeten Patienten einen Link „Meine Termine“ und „Abmelden“, sonst „Anmelden“.
-- Eine schlichte geschützte Seite „Meine Termine“ listet die eigenen kommenden und vergangenen Termine.
+- **Buchen:** Anmeldung im Pop-up → nur Buchung, keine Weiterleitung.
+- **„Intern“ oben rechts:** führt auf die Anmeldeseite. Nach dem Login landet ein Patient in seinem persönlichen Bereich, Team-Konten wie bisher im Praxisbereich.
+
+## Persönlicher Bereich für Patienten
+
+- Neue geschützte Seite „Mein Bereich“ mit zwei Abschnitten:
+  - **Termine:** kommende und vergangene Termine mit Behandlung, Behandler:in, Datum und Uhrzeit.
+  - **Rechnungen:** Rechnungsnummer, Datum, Betrag und Status (offen, bezahlt, angemahnt) inklusive Zahlungshinweis mit Bankverbindung.
+- Platzhalter-Abschnitt „Fragebogen“ ist vorbereitet, aber in diesem Schritt noch leer.
+- Fragebogen später: wird automatisch 3 Tage nach dem Termin freigeschaltet – das wird jetzt nur vorgesehen, nicht gebaut.
+
 
 ## Datenbank
 
@@ -43,8 +53,9 @@ Klick auf Zeit
 
 ## Technische Umsetzung
 
-- Neue Komponente `src/components/site/BuchungsDialog.tsx` auf Basis von shadcn `Dialog`; enthält Anmelden/Registrieren-Tabs und den Buchungsabschluss.
+- Neue Komponente `src/components/site/BuchungsDialog.tsx` auf Basis von shadcn `Dialog`; enthält Anmelden/Registrieren-Tabs und den Buchungsabschluss – ohne `navigate`, damit der Nutzer auf der Buchungsseite bleibt.
 - `BuchungsWizard.tsx`: Formularblock unterhalb des Kalenders entfällt; `onWaehlen` öffnet den Dialog. Der feste Container und die Höhen bleiben unverändert.
 - Sitzung über `supabase.auth.getUser()` plus `onAuthStateChange`; Registrierung mit `signUp` inkl. `options.data` für Name, Telefon, Geburtsdatum und Adresse.
 - Auto-Bestätigung der E-Mail wird in den Auth-Einstellungen aktiviert.
-- Neue Route `src/routes/_authenticated/meine-termine.tsx` (Rolle Patient) sowie Anpassung von `SiteHeader.tsx` für den sitzungsabhängigen Link.
+- `src/routes/auth.tsx`: Weiterleitung nach Login abhängig von der Rolle – Team zu `/praxis`, Patient zu `/mein-bereich`.
+- Neue Route `src/routes/_authenticated/mein-bereich.tsx` (Termine + Rechnungen) sowie Anpassung von `SiteHeader.tsx`: „Intern“ bleibt, angemeldete Patienten sehen dort „Mein Bereich“.
