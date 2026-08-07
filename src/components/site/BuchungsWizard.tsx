@@ -291,103 +291,29 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
                     slots={slots ?? []}
                     spalte={person?.name ?? "Freie Zeiten"}
                     gewaehlt={gewaehlt}
-                    onWaehlen={setGewaehlt}
+                    onWaehlen={slotGewaehlt}
                     kompakt={kompakt}
                   />
                 )}
 
                 {gewaehlt ? (
-                  <div className="mt-6 rounded-3xl bg-creme p-5 sm:p-6">
-                    <p className="eyebrow mb-1">Deine Zeit</p>
-                    <p className="mb-5 font-display text-xl text-primary">
+                  <div className="mt-6 flex flex-wrap items-center gap-4 rounded-3xl bg-creme p-5">
+                    <p className="font-display text-lg text-primary">
                       {format(parseISO(gewaehlt), "EEEE, d. MMMM 'um' HH:mm 'Uhr'", { locale: de })}
                     </p>
-
-                    <div className={`grid gap-4 ${kompakt ? "" : "sm:grid-cols-2"}`}>
-                      <div>
-                        <Label htmlFor="bw-name">Name *</Label>
-                        <Input
-                          id="bw-name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="mt-1.5"
-                          autoComplete="name"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="bw-email">E-Mail *</Label>
-                        <Input
-                          id="bw-email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="mt-1.5"
-                          autoComplete="email"
-                        />
-                      </div>
-                      <div className={kompakt ? "" : "sm:col-span-2"}>
-                        <Label htmlFor="bw-telefon">Telefon</Label>
-                        <Input
-                          id="bw-telefon"
-                          type="tel"
-                          value={telefon}
-                          onChange={(e) => setTelefon(e.target.value)}
-                          className="mt-1.5"
-                          autoComplete="tel"
-                        />
-                      </div>
-                      <div className={kompakt ? "" : "sm:col-span-2"}>
-                        <Label htmlFor="bw-anliegen">Dein Anliegen</Label>
-                        <Textarea
-                          id="bw-anliegen"
-                          value={anliegen}
-                          onChange={(e) => setAnliegen(e.target.value)}
-                          rows={3}
-                          className="mt-1.5"
-                          placeholder="Was führt dich zu uns?"
-                        />
-                      </div>
-                    </div>
-
-                    <label className="mt-5 flex items-start gap-3 text-[0.9rem]">
-                      <input
-                        type="checkbox"
-                        checked={zustimmung}
-                        onChange={(e) => setZustimmung(e.target.checked)}
-                        className="mt-1 size-4"
-                      />
-                      <span>
-                        Ich habe die{" "}
-                        <a
-                          href="/datenschutz"
-                          className="text-secondary underline underline-offset-4"
-                        >
-                          Datenschutzerklärung
-                        </a>{" "}
-                        gelesen und bin mit der Verarbeitung meiner Angaben zur Terminvereinbarung
-                        einverstanden. *
-                      </span>
-                    </label>
-
-                    {fehler ? (
-                      <p className="mt-4 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                        {fehler}
-                      </p>
-                    ) : null}
-
                     <Button
                       variant="pill"
-                      size="pill"
-                      className="mt-6 w-full sm:w-auto"
-                      disabled={sendet || !zustimmung || !name.trim() || !email.trim()}
-                      onClick={() => void buchen()}
+                      size="pillSm"
+                      className="ml-auto"
+                      onClick={() => setDialogOffen(true)}
                     >
-                      {sendet ? "Wird gebucht …" : "Verbindlich buchen"}
+                      Weiter
                     </Button>
                   </div>
                 ) : null}
               </>
             ) : null}
+
           </div>
         </>
       )}
