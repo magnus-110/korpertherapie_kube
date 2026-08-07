@@ -145,8 +145,9 @@ function AuthPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Dieser Bereich ist ausschließlich für autorisierte Mitarbeiter:innen der Praxis Kube bestimmt.
+          Noch kein Konto? Es entsteht automatisch bei deiner ersten Terminbuchung.
         </p>
+
       </div>
     </div>
   );
