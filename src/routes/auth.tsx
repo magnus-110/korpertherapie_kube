@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Lock } from "lucide-react";
+import { startseite, type Rolle } from "@/lib/rollen";
+
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -86,8 +88,11 @@ function AuthPage() {
               <Lock className="size-5" />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-semibold text-primary">Interner Bereich</h1>
-              <p className="text-sm text-muted-foreground">Bitte melden Sie sich an.</p>
+              <h1 className="font-display text-2xl font-semibold text-primary">Anmelden</h1>
+              <p className="text-sm text-muted-foreground">
+                Für Patient:innen und das Praxisteam.
+              </p>
+
             </div>
           </div>
 
