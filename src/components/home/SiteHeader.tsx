@@ -137,9 +137,10 @@ export function SiteHeader() {
                     to="/auth"
                     className="text-lg font-semibold text-primary transition-colors hover:text-secondary"
                   >
-                    Intern
+                    {angemeldet ? "Mein Bereich" : "Anmelden"}
                   </Link>
                 </SheetClose>
+
                 <SheetClose asChild>
                   <Button asChild variant="pill" size="pill" className="mt-2 w-full">
                     <Link to="/termin">Termin buchen</Link>
