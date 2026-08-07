@@ -23,12 +23,24 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /** Nach dem Login je nach Rolle in den passenden Bereich. */
+  async function weiter(userId: string) {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .limit(1);
+    const rolle: Rolle = data?.[0]?.role ?? "patient";
+    navigate({ to: startseite[rolle], replace: true });
+  }
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
-        navigate({ to: "/praxis", replace: true });
+        void weiter(data.user.id);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -49,8 +61,9 @@ function AuthPage() {
       return;
     }
 
-    navigate({ to: "/praxis", replace: true });
+    await weiter(data.user.id);
   }
+
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-8">
