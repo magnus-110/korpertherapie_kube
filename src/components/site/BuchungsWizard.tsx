@@ -35,16 +35,10 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
   const [artId, setArtId] = useState<string | null>(null);
   const [slots, setSlots] = useState<Slot[] | null>(null);
   const [gewaehlt, setGewaehlt] = useState<string | null>(null);
+  const [dialogOffen, setDialogOffen] = useState(false);
   const [fertig, setFertig] = useState(false);
   const [laedt, setLaedt] = useState(false);
-  const [sendet, setSendet] = useState(false);
-  const [fehler, setFehler] = useState<string | null>(null);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefon, setTelefon] = useState("");
-  const [anliegen, setAnliegen] = useState("");
-  const [zustimmung, setZustimmung] = useState(false);
 
   useEffect(() => {
     let abgebrochen = false;
