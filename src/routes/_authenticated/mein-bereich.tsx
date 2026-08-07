@@ -96,7 +96,7 @@ function MeinBereich() {
               <p className="text-muted-foreground">Aktuell steht kein Termin an.</p>
             ) : (
               <ul className="grid gap-2">
-                {kommend.map((t) => (
+                {kommend.map((t: Termin) => (
                   <li
                     key={t.id}
                     className="flex flex-wrap items-center gap-3 rounded-xl bg-creme px-4 py-3"
@@ -121,7 +121,7 @@ function MeinBereich() {
                   Vergangene Termine
                 </h3>
                 <ul className="grid gap-2">
-                  {vergangen.map((t) => (
+                  {vergangen.map((t: Termin) => (
                     <li key={t.id} className="rounded-xl bg-background/70 px-4 py-2.5 text-sm">
                       <span className="text-primary">
                         {format(new Date(t.start), "d.M.yyyy, HH:mm", { locale: de })}
@@ -144,7 +144,7 @@ function MeinBereich() {
               <p className="text-muted-foreground">Es liegt keine Rechnung vor.</p>
             ) : (
               <ul className="grid gap-2">
-                {rechnungen.map((r) => (
+                {rechnungen.map((r: Rechnung) => (
                   <li
                     key={r.id}
                     className="flex flex-wrap items-center gap-3 rounded-xl bg-creme px-4 py-3"
