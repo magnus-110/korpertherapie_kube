@@ -440,10 +440,14 @@ export type Database = {
           app_user_id: string | null
           created_at: string
           email: string | null
+          geburtsdatum: string | null
           id: string
           kontakt: string | null
           name: string
           notizen: string | null
+          ort: string | null
+          plz: string | null
+          strasse: string | null
           telefon: string | null
           updated_at: string
         }
@@ -451,10 +455,14 @@ export type Database = {
           app_user_id?: string | null
           created_at?: string
           email?: string | null
+          geburtsdatum?: string | null
           id?: string
           kontakt?: string | null
           name: string
           notizen?: string | null
+          ort?: string | null
+          plz?: string | null
+          strasse?: string | null
           telefon?: string | null
           updated_at?: string
         }
@@ -462,10 +470,14 @@ export type Database = {
           app_user_id?: string | null
           created_at?: string
           email?: string | null
+          geburtsdatum?: string | null
           id?: string
           kontakt?: string | null
           name?: string
           notizen?: string | null
+          ort?: string | null
+          plz?: string | null
+          strasse?: string | null
           telefon?: string | null
           updated_at?: string
         }
@@ -617,15 +629,8 @@ export type Database = {
       is_verwaltung: { Args: never; Returns: boolean }
       mein_patient_id: { Args: never; Returns: string }
       mein_practitioner_id: { Args: never; Returns: string }
-      termin_buchen: {
-        Args: {
-          _anliegen: string
-          _behandlungsart: string
-          _email: string
-          _name: string
-          _start: string
-          _telefon: string
-        }
+      termin_buchen_konto: {
+        Args: { _anliegen: string; _behandlungsart: string; _start: string }
         Returns: string
       }
     }
