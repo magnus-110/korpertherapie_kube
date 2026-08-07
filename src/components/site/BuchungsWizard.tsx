@@ -311,6 +311,20 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
           </div>
         </>
       )}
+
+      {art && gewaehlt ? (
+        <BuchungsDialog
+          offen={dialogOffen}
+          onOpenChange={setDialogOffen}
+          artId={art.id}
+          artName={art.name}
+          personName={person?.name ?? "Praxis Kube"}
+          dauer={art.dauer_minuten ?? 60}
+          start={gewaehlt}
+          onGebucht={() => setFertig(true)}
+        />
+      ) : null}
     </div>
   );
 }
+
