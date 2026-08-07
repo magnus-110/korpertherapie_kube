@@ -131,7 +131,7 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
           <div className="mb-5 grid size-12 place-items-center rounded-full bg-primary text-primary-foreground">
             <Check className="size-6" aria-hidden="true" />
           </div>
-          <p className="eyebrow mb-2">Wir freuen uns auf dich</p>
+          <p className="eyebrow mb-2">Termin gebucht</p>
           <p className="font-display text-2xl text-primary">{art.name}</p>
           <p className="mt-2 text-lg text-secondary">
             {gewaehlt
@@ -139,8 +139,7 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
               : null}
           </p>
           <p className="mt-6 text-[0.95rem]">
-            Mehr musst du nicht tun – die Zeit gehört jetzt dir. Sollte etwas dazwischenkommen, ruf
-            uns einfach kurz an: {praxis.telefon}.
+            Du bekommst eine Bestätigung per E-Mail. Fragen? {praxis.telefon}
           </p>
         </div>
       ) : (
@@ -177,14 +176,14 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
                     {
                       wert: "erstbehandlung" as const,
                       icon: Sparkles,
-                      titel: "Zum ersten Mal hier",
-                      text: "Wir nehmen uns bewusst mehr Zeit – für deine Geschichte und einen ruhigen Anfang.",
+                      titel: "Erstbehandlung",
+                      text: "Erster Termin bei uns.",
                     },
                     {
                       wert: "folgetermin" as const,
                       icon: Repeat,
-                      titel: "Wir machen weiter",
-                      text: "Du kennst uns schon. Such dir deine nächste Zeit aus, wir knüpfen dort an, wo ihr aufgehört habt.",
+                      titel: "Folgetermin",
+                      text: "Du warst schon da.",
                     },
                   ] satisfies {
                     wert: Kategorie;
@@ -226,8 +225,7 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
                 {passende.length === 0 ? (
                   <div className="rounded-2xl bg-creme p-6">
                     <p className="text-primary">
-                      Für diesen Anlass ist gerade nichts online frei – ein Anruf genügt, wir finden
-                      einen Platz für dich.
+                      Dafür ist online nichts frei. Ruf uns gerne an.
                     </p>
                     <Button asChild variant="pill" size="pill" className="mt-4">
                       <a href={praxis.telefonHref}>
@@ -295,9 +293,7 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
                   </p>
                 ) : (slots ?? []).length === 0 ? (
                   <div className="rounded-2xl bg-creme p-6">
-                    <p className="text-primary">
-                      Hier ist gerade alles belegt – ruf uns an, wir finden gemeinsam eine Zeit.
-                    </p>
+                    <p className="text-primary">Gerade ist alles belegt. Ruf uns gerne an.</p>
                     <Button asChild variant="pill" size="pill" className="mt-4">
                       <a href={praxis.telefonHref}>
                         <Phone className="size-4" aria-hidden="true" /> {praxis.telefon}

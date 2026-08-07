@@ -25,11 +25,8 @@ export const Route = createFileRoute("/termin")({
 function TerminSeite() {
   return (
     <SiteLayout>
-      <PageHero eyebrow="Termin buchen" title="Zeit für dich – ein Platz wartet schon">
-        <p>
-          Kein Warten in der Leitung, kein Hin und Her: Du siehst die freien Zeiten direkt im
-          Kalender und sicherst dir die, die zu deinem Leben passt.
-        </p>
+      <PageHero eyebrow="Termin" title="Termin buchen">
+        <p>Freie Zeiten ansehen und direkt buchen.</p>
       </PageHero>
 
       <section className="py-14 sm:py-20">
