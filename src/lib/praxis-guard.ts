@@ -11,6 +11,7 @@ export function nurVerwaltung(rolle: Rolle) {
 /** Schützt Seiten, die dem Praxisteam offenstehen. */
 export function nurTeam(rolle: Rolle) {
   if (rolle !== "verwaltung" && rolle !== "behandler") {
-    throw redirect({ to: "/praxis" });
+    throw redirect({ to: startseite[rolle] });
   }
 }
+
