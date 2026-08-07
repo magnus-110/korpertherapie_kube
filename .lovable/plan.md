@@ -53,8 +53,9 @@ Klick auf Zeit
 
 ## Technische Umsetzung
 
-- Neue Komponente `src/components/site/BuchungsDialog.tsx` auf Basis von shadcn `Dialog`; enthält Anmelden/Registrieren-Tabs und den Buchungsabschluss.
+- Neue Komponente `src/components/site/BuchungsDialog.tsx` auf Basis von shadcn `Dialog`; enthält Anmelden/Registrieren-Tabs und den Buchungsabschluss – ohne `navigate`, damit der Nutzer auf der Buchungsseite bleibt.
 - `BuchungsWizard.tsx`: Formularblock unterhalb des Kalenders entfällt; `onWaehlen` öffnet den Dialog. Der feste Container und die Höhen bleiben unverändert.
 - Sitzung über `supabase.auth.getUser()` plus `onAuthStateChange`; Registrierung mit `signUp` inkl. `options.data` für Name, Telefon, Geburtsdatum und Adresse.
 - Auto-Bestätigung der E-Mail wird in den Auth-Einstellungen aktiviert.
-- Neue Route `src/routes/_authenticated/meine-termine.tsx` (Rolle Patient) sowie Anpassung von `SiteHeader.tsx` für den sitzungsabhängigen Link.
+- `src/routes/auth.tsx`: Weiterleitung nach Login abhängig von der Rolle – Team zu `/praxis`, Patient zu `/mein-bereich`.
+- Neue Route `src/routes/_authenticated/mein-bereich.tsx` (Termine + Rechnungen) sowie Anpassung von `SiteHeader.tsx`: „Intern“ bleibt, angemeldete Patienten sehen dort „Mein Bereich“.
