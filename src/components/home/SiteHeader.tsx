@@ -87,16 +87,21 @@ export function SiteHeader() {
               <TooltipTrigger asChild>
                 <Link
                   to="/auth"
-                  aria-label="Interner Bereich – Anmeldung"
+                  aria-label={angemeldet ? "Mein Bereich" : "Anmeldung"}
                   className="grid min-h-11 min-w-11 place-items-center rounded-full text-primary/70 transition-colors hover:bg-accent hover:text-secondary"
                 >
-                  <Lock className="size-5" aria-hidden="true" />
+                  {angemeldet ? (
+                    <UserRound className="size-5" aria-hidden="true" />
+                  ) : (
+                    <Lock className="size-5" aria-hidden="true" />
+                  )}
                 </Link>
               </TooltipTrigger>
-              <TooltipContent>Interner Bereich</TooltipContent>
+              <TooltipContent>{angemeldet ? "Mein Bereich" : "Anmelden"}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </nav>
+
 
         <div className="flex items-center gap-2 lg:hidden">
           <Button asChild variant="pill" size="pillSm">
