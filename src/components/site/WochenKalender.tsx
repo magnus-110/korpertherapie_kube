@@ -76,7 +76,7 @@ export function WochenKalender({
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-auto" style={{ maxHeight: kompakt ? 300 : 380 }}>
         <div
           className="grid gap-1"
           style={{
