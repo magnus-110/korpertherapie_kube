@@ -12,7 +12,7 @@ export const rollenLabel: Record<Rolle, string> = {
 export const startseite: Record<Rolle, string> = {
   verwaltung: "/praxis/uebersicht",
   behandler: "/praxis/heute",
-  patient: "/praxis",
+  patient: "/mein-bereich",
 };
 
 export type Behandler = {

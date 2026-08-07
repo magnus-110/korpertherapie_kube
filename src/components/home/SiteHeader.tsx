@@ -1,8 +1,24 @@
 import { Link } from "@tanstack/react-router";
-import { Lock, Menu } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Lock, Menu, UserRound } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+/** Merkt sich, ob gerade jemand angemeldet ist – für die Beschriftung oben rechts. */
+function useAngemeldet() {
+  const [angemeldet, setAngemeldet] = useState(false);
+  useEffect(() => {
+    void supabase.auth.getUser().then(({ data }) => setAngemeldet(Boolean(data.user)));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) =>
+      setAngemeldet(Boolean(session?.user)),
+    );
+    return () => sub.subscription.unsubscribe();
+  }, []);
+  return angemeldet;
+}
+
 
 const links = [
   { to: "/", label: "Startseite" },
@@ -45,7 +61,9 @@ function Brand({ light = false }: { light?: boolean }) {
 export { Brand };
 
 export function SiteHeader() {
+  const angemeldet = useAngemeldet();
   return (
+
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1140px] items-center justify-between px-5 py-4 sm:px-8">
         <Brand />
@@ -69,16 +87,21 @@ export function SiteHeader() {
               <TooltipTrigger asChild>
                 <Link
                   to="/auth"
-                  aria-label="Interner Bereich – Anmeldung"
+                  aria-label={angemeldet ? "Mein Bereich" : "Anmeldung"}
                   className="grid min-h-11 min-w-11 place-items-center rounded-full text-primary/70 transition-colors hover:bg-accent hover:text-secondary"
                 >
-                  <Lock className="size-5" aria-hidden="true" />
+                  {angemeldet ? (
+                    <UserRound className="size-5" aria-hidden="true" />
+                  ) : (
+                    <Lock className="size-5" aria-hidden="true" />
+                  )}
                 </Link>
               </TooltipTrigger>
-              <TooltipContent>Interner Bereich</TooltipContent>
+              <TooltipContent>{angemeldet ? "Mein Bereich" : "Anmelden"}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </nav>
+
 
         <div className="flex items-center gap-2 lg:hidden">
           <Button asChild variant="pill" size="pillSm">
@@ -114,9 +137,10 @@ export function SiteHeader() {
                     to="/auth"
                     className="text-lg font-semibold text-primary transition-colors hover:text-secondary"
                   >
-                    Intern
+                    {angemeldet ? "Mein Bereich" : "Anmelden"}
                   </Link>
                 </SheetClose>
+
                 <SheetClose asChild>
                   <Button asChild variant="pill" size="pill" className="mt-2 w-full">
                     <Link to="/termin">Termin buchen</Link>

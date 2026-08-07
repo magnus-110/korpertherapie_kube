@@ -4,11 +4,10 @@ import { de } from "date-fns/locale";
 import { ArrowLeft, Check, Clock, Loader2, Phone, Sparkles, Repeat } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { WochenKalender, type Slot } from "@/components/site/WochenKalender";
+import { BuchungsDialog } from "@/components/site/BuchungsDialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { praxis } from "@/lib/praxis";
+
 
 type Kategorie = "erstbehandlung" | "folgetermin";
 
@@ -35,16 +34,10 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
   const [artId, setArtId] = useState<string | null>(null);
   const [slots, setSlots] = useState<Slot[] | null>(null);
   const [gewaehlt, setGewaehlt] = useState<string | null>(null);
+  const [dialogOffen, setDialogOffen] = useState(false);
   const [fertig, setFertig] = useState(false);
   const [laedt, setLaedt] = useState(false);
-  const [sendet, setSendet] = useState(false);
-  const [fehler, setFehler] = useState<string | null>(null);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [telefon, setTelefon] = useState("");
-  const [anliegen, setAnliegen] = useState("");
-  const [zustimmung, setZustimmung] = useState(false);
 
   useEffect(() => {
     let abgebrochen = false;
@@ -99,25 +92,11 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
     };
   }, [artId]);
 
-  async function buchen() {
-    if (!artId || !gewaehlt) return;
-    setSendet(true);
-    setFehler(null);
-    const { error } = await supabase.rpc("termin_buchen", {
-      _behandlungsart: artId,
-      _start: gewaehlt,
-      _name: name,
-      _email: email,
-      _telefon: telefon,
-      _anliegen: anliegen,
-    });
-    setSendet(false);
-    if (error) {
-      setFehler(error.message.replace(/^.*?:\s*/, ""));
-      return;
-    }
-    setFertig(true);
+  function slotGewaehlt(start: string) {
+    setGewaehlt(start);
+    setDialogOffen(true);
   }
+
 
   const schritt = !kategorie ? 1 : !art ? 2 : 3;
 
@@ -305,106 +284,46 @@ export function BuchungsWizard({ kompakt = false }: { kompakt?: boolean }) {
                     slots={slots ?? []}
                     spalte={person?.name ?? "Freie Zeiten"}
                     gewaehlt={gewaehlt}
-                    onWaehlen={setGewaehlt}
+                    onWaehlen={slotGewaehlt}
                     kompakt={kompakt}
                   />
                 )}
 
                 {gewaehlt ? (
-                  <div className="mt-6 rounded-3xl bg-creme p-5 sm:p-6">
-                    <p className="eyebrow mb-1">Deine Zeit</p>
-                    <p className="mb-5 font-display text-xl text-primary">
+                  <div className="mt-6 flex flex-wrap items-center gap-4 rounded-3xl bg-creme p-5">
+                    <p className="font-display text-lg text-primary">
                       {format(parseISO(gewaehlt), "EEEE, d. MMMM 'um' HH:mm 'Uhr'", { locale: de })}
                     </p>
-
-                    <div className={`grid gap-4 ${kompakt ? "" : "sm:grid-cols-2"}`}>
-                      <div>
-                        <Label htmlFor="bw-name">Name *</Label>
-                        <Input
-                          id="bw-name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="mt-1.5"
-                          autoComplete="name"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="bw-email">E-Mail *</Label>
-                        <Input
-                          id="bw-email"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          className="mt-1.5"
-                          autoComplete="email"
-                        />
-                      </div>
-                      <div className={kompakt ? "" : "sm:col-span-2"}>
-                        <Label htmlFor="bw-telefon">Telefon</Label>
-                        <Input
-                          id="bw-telefon"
-                          type="tel"
-                          value={telefon}
-                          onChange={(e) => setTelefon(e.target.value)}
-                          className="mt-1.5"
-                          autoComplete="tel"
-                        />
-                      </div>
-                      <div className={kompakt ? "" : "sm:col-span-2"}>
-                        <Label htmlFor="bw-anliegen">Dein Anliegen</Label>
-                        <Textarea
-                          id="bw-anliegen"
-                          value={anliegen}
-                          onChange={(e) => setAnliegen(e.target.value)}
-                          rows={3}
-                          className="mt-1.5"
-                          placeholder="Was führt dich zu uns?"
-                        />
-                      </div>
-                    </div>
-
-                    <label className="mt-5 flex items-start gap-3 text-[0.9rem]">
-                      <input
-                        type="checkbox"
-                        checked={zustimmung}
-                        onChange={(e) => setZustimmung(e.target.checked)}
-                        className="mt-1 size-4"
-                      />
-                      <span>
-                        Ich habe die{" "}
-                        <a
-                          href="/datenschutz"
-                          className="text-secondary underline underline-offset-4"
-                        >
-                          Datenschutzerklärung
-                        </a>{" "}
-                        gelesen und bin mit der Verarbeitung meiner Angaben zur Terminvereinbarung
-                        einverstanden. *
-                      </span>
-                    </label>
-
-                    {fehler ? (
-                      <p className="mt-4 rounded-xl bg-destructive/10 px-4 py-3 text-sm text-destructive">
-                        {fehler}
-                      </p>
-                    ) : null}
-
                     <Button
                       variant="pill"
-                      size="pill"
-                      className="mt-6 w-full sm:w-auto"
-                      disabled={sendet || !zustimmung || !name.trim() || !email.trim()}
-                      onClick={() => void buchen()}
+                      size="pillSm"
+                      className="ml-auto"
+                      onClick={() => setDialogOffen(true)}
                     >
-                      {sendet ? "Wird gebucht …" : "Verbindlich buchen"}
+                      Weiter
                     </Button>
                   </div>
                 ) : null}
               </>
             ) : null}
+
           </div>
         </>
       )}
+
+      {art && gewaehlt ? (
+        <BuchungsDialog
+          offen={dialogOffen}
+          onOpenChange={setDialogOffen}
+          artId={art.id}
+          artName={art.name}
+          personName={person?.name ?? "Praxis Kube"}
+          dauer={art.dauer_minuten ?? 60}
+          start={gewaehlt}
+          onGebucht={() => setFertig(true)}
+        />
+      ) : null}
     </div>
   );
 }
+

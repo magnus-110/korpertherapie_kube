@@ -20,6 +20,7 @@ import { Route as TerminRouteImport } from './routes/termin'
 import { Route as TherapienRouteImport } from './routes/therapien'
 import { Route as UeberUnsRouteImport } from './routes/ueber-uns'
 import { Route as WiderrufRouteImport } from './routes/widerruf'
+import { Route as AuthenticatedMeinBereichRouteImport } from './routes/_authenticated/mein-bereich'
 import { Route as AuthenticatedPraxisRouteRouteImport } from './routes/_authenticated/praxis/route'
 import { Route as AuthenticatedPraxisIndexRouteImport } from './routes/_authenticated/praxis/index'
 import { Route as AuthenticatedPraxisAnfragenRouteImport } from './routes/_authenticated/praxis/anfragen'
@@ -88,6 +89,12 @@ const WiderrufRoute = WiderrufRouteImport.update({
   path: '/widerruf',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedMeinBereichRoute =
+  AuthenticatedMeinBereichRouteImport.update({
+    id: '/mein-bereich',
+    path: '/mein-bereich',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPraxisRouteRoute =
   AuthenticatedPraxisRouteRouteImport.update({
     id: '/praxis',
@@ -179,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/ueber-uns': typeof UeberUnsRoute
   '/widerruf': typeof WiderrufRoute
   '/praxis': typeof AuthenticatedPraxisRouteRouteWithChildren
+  '/mein-bereich': typeof AuthenticatedMeinBereichRoute
   '/praxis/anfragen': typeof AuthenticatedPraxisAnfragenRoute
   '/praxis/einstellungen': typeof AuthenticatedPraxisEinstellungenRoute
   '/praxis/heute': typeof AuthenticatedPraxisHeuteRoute
@@ -203,6 +211,7 @@ export interface FileRoutesByTo {
   '/therapien': typeof TherapienRoute
   '/ueber-uns': typeof UeberUnsRoute
   '/widerruf': typeof WiderrufRoute
+  '/mein-bereich': typeof AuthenticatedMeinBereichRoute
   '/praxis/anfragen': typeof AuthenticatedPraxisAnfragenRoute
   '/praxis/einstellungen': typeof AuthenticatedPraxisEinstellungenRoute
   '/praxis/heute': typeof AuthenticatedPraxisHeuteRoute
@@ -230,6 +239,7 @@ export interface FileRoutesById {
   '/ueber-uns': typeof UeberUnsRoute
   '/widerruf': typeof WiderrufRoute
   '/_authenticated/praxis': typeof AuthenticatedPraxisRouteRouteWithChildren
+  '/_authenticated/mein-bereich': typeof AuthenticatedMeinBereichRoute
   '/_authenticated/praxis/anfragen': typeof AuthenticatedPraxisAnfragenRoute
   '/_authenticated/praxis/einstellungen': typeof AuthenticatedPraxisEinstellungenRoute
   '/_authenticated/praxis/heute': typeof AuthenticatedPraxisHeuteRoute
@@ -257,6 +267,7 @@ export interface FileRouteTypes {
     | '/ueber-uns'
     | '/widerruf'
     | '/praxis'
+    | '/mein-bereich'
     | '/praxis/anfragen'
     | '/praxis/einstellungen'
     | '/praxis/heute'
@@ -281,6 +292,7 @@ export interface FileRouteTypes {
     | '/therapien'
     | '/ueber-uns'
     | '/widerruf'
+    | '/mein-bereich'
     | '/praxis/anfragen'
     | '/praxis/einstellungen'
     | '/praxis/heute'
@@ -307,6 +319,7 @@ export interface FileRouteTypes {
     | '/ueber-uns'
     | '/widerruf'
     | '/_authenticated/praxis'
+    | '/_authenticated/mein-bereich'
     | '/_authenticated/praxis/anfragen'
     | '/_authenticated/praxis/einstellungen'
     | '/_authenticated/praxis/heute'
@@ -413,6 +426,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/widerruf'
       preLoaderRoute: typeof WiderrufRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/mein-bereich': {
+      id: '/_authenticated/mein-bereich'
+      path: '/mein-bereich'
+      fullPath: '/mein-bereich'
+      preLoaderRoute: typeof AuthenticatedMeinBereichRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/praxis': {
       id: '/_authenticated/praxis'
@@ -547,10 +567,12 @@ const AuthenticatedPraxisRouteRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedPraxisRouteRoute: typeof AuthenticatedPraxisRouteRouteWithChildren
+  AuthenticatedMeinBereichRoute: typeof AuthenticatedMeinBereichRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPraxisRouteRoute: AuthenticatedPraxisRouteRouteWithChildren,
+  AuthenticatedMeinBereichRoute: AuthenticatedMeinBereichRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -572,13 +594,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

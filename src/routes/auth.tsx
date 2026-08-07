@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Loader2, Lock } from "lucide-react";
+import { startseite, type Rolle } from "@/lib/rollen";
+
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -23,12 +25,24 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  /** Nach dem Login je nach Rolle in den passenden Bereich. */
+  async function weiter(userId: string) {
+    const { data } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .limit(1);
+    const rolle: Rolle = data?.[0]?.role ?? "patient";
+    navigate({ to: startseite[rolle], replace: true });
+  }
+
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (data.user) {
-        navigate({ to: "/praxis", replace: true });
+        void weiter(data.user.id);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -49,8 +63,9 @@ function AuthPage() {
       return;
     }
 
-    navigate({ to: "/praxis", replace: true });
+    await weiter(data.user.id);
   }
+
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-8">
@@ -73,8 +88,11 @@ function AuthPage() {
               <Lock className="size-5" />
             </div>
             <div>
-              <h1 className="font-display text-2xl font-semibold text-primary">Interner Bereich</h1>
-              <p className="text-sm text-muted-foreground">Bitte melden Sie sich an.</p>
+              <h1 className="font-display text-2xl font-semibold text-primary">Anmelden</h1>
+              <p className="text-sm text-muted-foreground">
+                Für Patient:innen und das Praxisteam.
+              </p>
+
             </div>
           </div>
 
@@ -127,8 +145,9 @@ function AuthPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Dieser Bereich ist ausschließlich für autorisierte Mitarbeiter:innen der Praxis Kube bestimmt.
+          Noch kein Konto? Es entsteht automatisch bei deiner ersten Terminbuchung.
         </p>
+
       </div>
     </div>
   );
