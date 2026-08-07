@@ -56,11 +56,15 @@ const statusLabel: Record<string, string> = {
 };
 
 function MeinBereich() {
-  const { termine, rechnungen } = Route.useLoaderData();
+  const { termine, rechnungen } = Route.useLoaderData() as {
+    termine: Termin[];
+    rechnungen: Rechnung[];
+  };
   const navigate = useNavigate();
   const jetzt = Date.now();
-  const kommend = termine.filter((t) => new Date(t.start).getTime() >= jetzt).reverse();
-  const vergangen = termine.filter((t) => new Date(t.start).getTime() < jetzt);
+  const kommend = termine.filter((t: Termin) => new Date(t.start).getTime() >= jetzt).reverse();
+  const vergangen = termine.filter((t: Termin) => new Date(t.start).getTime() < jetzt);
+
 
   async function abmelden() {
     await supabase.auth.signOut();
