@@ -68,10 +68,12 @@ const statusLabel: Record<string, string> = {
 };
 
 function MeinBereich() {
-  const { termine, rechnungen } = Route.useLoaderData() as {
+  const { termine, rechnungen, fragebogen } = Route.useLoaderData() as {
     termine: Termin[];
     rechnungen: Rechnung[];
+    fragebogen: Fragebogen[];
   };
+
   const navigate = useNavigate();
   const jetzt = Date.now();
   const kommend = termine.filter((t: Termin) => new Date(t.start).getTime() >= jetzt).reverse();
