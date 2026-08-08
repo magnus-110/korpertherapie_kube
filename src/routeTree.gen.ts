@@ -34,7 +34,7 @@ import { Route as AuthenticatedPraxisSucheRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPraxisUebersichtRouteImport } from './routes/_authenticated/praxis/uebersicht'
 import { Route as AuthenticatedPraxisZahlungenRouteImport } from './routes/_authenticated/praxis/zahlungen'
 import { Route as AuthenticatedPraxisPatientenIndexRouteImport } from './routes/_authenticated/praxis/patienten.index'
-import { Route as AuthenticatedPraxisPatientenPatientIdRouteImport } from './routes/_authenticated/praxis/patienten.$patientId'
+import { Route as AuthenticatedPraxisPatientenPatientIdIndexRouteImport } from './routes/_authenticated/praxis/patienten.$patientId.index'
 import { Route as AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRouteImport } from './routes/_authenticated/praxis/patienten.$patientId.episode.$episodeId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -175,17 +175,17 @@ const AuthenticatedPraxisPatientenIndexRoute =
     path: '/patienten/',
     getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
-const AuthenticatedPraxisPatientenPatientIdRoute =
-  AuthenticatedPraxisPatientenPatientIdRouteImport.update({
-    id: '/patienten/$patientId',
-    path: '/patienten/$patientId',
+const AuthenticatedPraxisPatientenPatientIdIndexRoute =
+  AuthenticatedPraxisPatientenPatientIdIndexRouteImport.update({
+    id: '/patienten/$patientId/',
+    path: '/patienten/$patientId/',
     getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
 const AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute =
   AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRouteImport.update({
-    id: '/episode/$episodeId',
-    path: '/episode/$episodeId',
-    getParentRoute: () => AuthenticatedPraxisPatientenPatientIdRoute,
+    id: '/patienten/$patientId/episode/$episodeId',
+    path: '/patienten/$patientId/episode/$episodeId',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -212,8 +212,8 @@ export interface FileRoutesByFullPath {
   '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/praxis/': typeof AuthenticatedPraxisIndexRoute
-  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdRouteWithChildren
   '/praxis/patienten/': typeof AuthenticatedPraxisPatientenIndexRoute
+  '/praxis/patienten/$patientId/': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
   '/praxis/patienten/$patientId/episode/$episodeId': typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 export interface FileRoutesByTo {
@@ -239,8 +239,8 @@ export interface FileRoutesByTo {
   '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/praxis': typeof AuthenticatedPraxisIndexRoute
-  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdRouteWithChildren
   '/praxis/patienten': typeof AuthenticatedPraxisPatientenIndexRoute
+  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
   '/praxis/patienten/$patientId/episode/$episodeId': typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 export interface FileRoutesById {
@@ -269,8 +269,8 @@ export interface FileRoutesById {
   '/_authenticated/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/_authenticated/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/_authenticated/praxis/': typeof AuthenticatedPraxisIndexRoute
-  '/_authenticated/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdRouteWithChildren
   '/_authenticated/praxis/patienten/': typeof AuthenticatedPraxisPatientenIndexRoute
+  '/_authenticated/praxis/patienten/$patientId/': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
   '/_authenticated/praxis/patienten/$patientId/episode/$episodeId': typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 export interface FileRouteTypes {
@@ -299,8 +299,8 @@ export interface FileRouteTypes {
     | '/praxis/uebersicht'
     | '/praxis/zahlungen'
     | '/praxis/'
-    | '/praxis/patienten/$patientId'
     | '/praxis/patienten/'
+    | '/praxis/patienten/$patientId/'
     | '/praxis/patienten/$patientId/episode/$episodeId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -326,8 +326,8 @@ export interface FileRouteTypes {
     | '/praxis/uebersicht'
     | '/praxis/zahlungen'
     | '/praxis'
-    | '/praxis/patienten/$patientId'
     | '/praxis/patienten'
+    | '/praxis/patienten/$patientId'
     | '/praxis/patienten/$patientId/episode/$episodeId'
   id:
     | '__root__'
@@ -355,8 +355,8 @@ export interface FileRouteTypes {
     | '/_authenticated/praxis/uebersicht'
     | '/_authenticated/praxis/zahlungen'
     | '/_authenticated/praxis/'
-    | '/_authenticated/praxis/patienten/$patientId'
     | '/_authenticated/praxis/patienten/'
+    | '/_authenticated/praxis/patienten/$patientId/'
     | '/_authenticated/praxis/patienten/$patientId/episode/$episodeId'
   fileRoutesById: FileRoutesById
 }
@@ -551,37 +551,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPraxisPatientenIndexRouteImport
       parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
-    '/_authenticated/praxis/patienten/$patientId': {
-      id: '/_authenticated/praxis/patienten/$patientId'
+    '/_authenticated/praxis/patienten/$patientId/': {
+      id: '/_authenticated/praxis/patienten/$patientId/'
       path: '/patienten/$patientId'
-      fullPath: '/praxis/patienten/$patientId'
-      preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdRouteImport
+      fullPath: '/praxis/patienten/$patientId/'
+      preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdIndexRouteImport
       parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
     '/_authenticated/praxis/patienten/$patientId/episode/$episodeId': {
       id: '/_authenticated/praxis/patienten/$patientId/episode/$episodeId'
-      path: '/episode/$episodeId'
+      path: '/patienten/$patientId/episode/$episodeId'
       fullPath: '/praxis/patienten/$patientId/episode/$episodeId'
       preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRouteImport
-      parentRoute: typeof AuthenticatedPraxisPatientenPatientIdRoute
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
   }
 }
-
-interface AuthenticatedPraxisPatientenPatientIdRouteChildren {
-  AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute: typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
-}
-
-const AuthenticatedPraxisPatientenPatientIdRouteChildren: AuthenticatedPraxisPatientenPatientIdRouteChildren =
-  {
-    AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute:
-      AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute,
-  }
-
-const AuthenticatedPraxisPatientenPatientIdRouteWithChildren =
-  AuthenticatedPraxisPatientenPatientIdRoute._addFileChildren(
-    AuthenticatedPraxisPatientenPatientIdRouteChildren,
-  )
 
 interface AuthenticatedPraxisRouteRouteChildren {
   AuthenticatedPraxisAnfragenRoute: typeof AuthenticatedPraxisAnfragenRoute
@@ -595,8 +580,9 @@ interface AuthenticatedPraxisRouteRouteChildren {
   AuthenticatedPraxisUebersichtRoute: typeof AuthenticatedPraxisUebersichtRoute
   AuthenticatedPraxisZahlungenRoute: typeof AuthenticatedPraxisZahlungenRoute
   AuthenticatedPraxisIndexRoute: typeof AuthenticatedPraxisIndexRoute
-  AuthenticatedPraxisPatientenPatientIdRoute: typeof AuthenticatedPraxisPatientenPatientIdRouteWithChildren
   AuthenticatedPraxisPatientenIndexRoute: typeof AuthenticatedPraxisPatientenIndexRoute
+  AuthenticatedPraxisPatientenPatientIdIndexRoute: typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
+  AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute: typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 
 const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildren =
@@ -613,10 +599,12 @@ const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildr
     AuthenticatedPraxisUebersichtRoute: AuthenticatedPraxisUebersichtRoute,
     AuthenticatedPraxisZahlungenRoute: AuthenticatedPraxisZahlungenRoute,
     AuthenticatedPraxisIndexRoute: AuthenticatedPraxisIndexRoute,
-    AuthenticatedPraxisPatientenPatientIdRoute:
-      AuthenticatedPraxisPatientenPatientIdRouteWithChildren,
     AuthenticatedPraxisPatientenIndexRoute:
       AuthenticatedPraxisPatientenIndexRoute,
+    AuthenticatedPraxisPatientenPatientIdIndexRoute:
+      AuthenticatedPraxisPatientenPatientIdIndexRoute,
+    AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute:
+      AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute,
   }
 
 const AuthenticatedPraxisRouteRouteWithChildren =
