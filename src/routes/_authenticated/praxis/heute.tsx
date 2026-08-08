@@ -65,7 +65,18 @@ function HeuteSeite() {
           <p className="mt-1 text-sm text-sage">
             {naechster.appointment_types?.name ?? "Ohne Behandlungsart"}
           </p>
+          {naechster.patient_id ? (
+            <Button asChild variant="pillLight" size="pillSm" className="mt-4">
+              <Link
+                to="/praxis/patienten/$patientId"
+                params={{ patientId: naechster.patient_id }}
+              >
+                Akte öffnen
+              </Link>
+            </Button>
+          ) : null}
         </section>
+
       ) : (
         <section className="rounded-3xl border border-dashed border-border bg-card/60 p-8 text-center">
           <p className="font-display text-xl text-primary">Heute steht nichts an</p>
