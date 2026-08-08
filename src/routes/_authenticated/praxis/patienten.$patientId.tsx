@@ -37,7 +37,7 @@ type Rechnung = {
   status: string;
 };
 
-export const Route = createFileRoute("/_authenticated/praxis/patienten/$patientId/")({
+export const Route = createFileRoute("/_authenticated/praxis/patienten/$patientId")({
   beforeLoad: ({ context }) => nurTeam(context.rolle),
   loader: async ({ params }) => {
     const [patient, episoden, rechnungen] = await Promise.all([

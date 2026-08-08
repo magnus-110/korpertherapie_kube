@@ -34,7 +34,7 @@ import { Route as AuthenticatedPraxisSucheRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPraxisUebersichtRouteImport } from './routes/_authenticated/praxis/uebersicht'
 import { Route as AuthenticatedPraxisZahlungenRouteImport } from './routes/_authenticated/praxis/zahlungen'
 import { Route as AuthenticatedPraxisPatientenIndexRouteImport } from './routes/_authenticated/praxis/patienten.index'
-import { Route as AuthenticatedPraxisPatientenPatientIdIndexRouteImport } from './routes/_authenticated/praxis/patienten.$patientId.index'
+import { Route as AuthenticatedPraxisPatientenPatientIdRouteImport } from './routes/_authenticated/praxis/patienten.$patientId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -174,10 +174,10 @@ const AuthenticatedPraxisPatientenIndexRoute =
     path: '/patienten/',
     getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
-const AuthenticatedPraxisPatientenPatientIdIndexRoute =
-  AuthenticatedPraxisPatientenPatientIdIndexRouteImport.update({
-    id: '/patienten/$patientId/',
-    path: '/patienten/$patientId/',
+const AuthenticatedPraxisPatientenPatientIdRoute =
+  AuthenticatedPraxisPatientenPatientIdRouteImport.update({
+    id: '/patienten/$patientId',
+    path: '/patienten/$patientId',
     getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
 
@@ -205,8 +205,8 @@ export interface FileRoutesByFullPath {
   '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/praxis/': typeof AuthenticatedPraxisIndexRoute
+  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdRoute
   '/praxis/patienten/': typeof AuthenticatedPraxisPatientenIndexRoute
-  '/praxis/patienten/$patientId/': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -231,8 +231,8 @@ export interface FileRoutesByTo {
   '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/praxis': typeof AuthenticatedPraxisIndexRoute
+  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdRoute
   '/praxis/patienten': typeof AuthenticatedPraxisPatientenIndexRoute
-  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -260,8 +260,8 @@ export interface FileRoutesById {
   '/_authenticated/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/_authenticated/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/_authenticated/praxis/': typeof AuthenticatedPraxisIndexRoute
+  '/_authenticated/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdRoute
   '/_authenticated/praxis/patienten/': typeof AuthenticatedPraxisPatientenIndexRoute
-  '/_authenticated/praxis/patienten/$patientId/': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -289,8 +289,8 @@ export interface FileRouteTypes {
     | '/praxis/uebersicht'
     | '/praxis/zahlungen'
     | '/praxis/'
+    | '/praxis/patienten/$patientId'
     | '/praxis/patienten/'
-    | '/praxis/patienten/$patientId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -315,8 +315,8 @@ export interface FileRouteTypes {
     | '/praxis/uebersicht'
     | '/praxis/zahlungen'
     | '/praxis'
-    | '/praxis/patienten'
     | '/praxis/patienten/$patientId'
+    | '/praxis/patienten'
   id:
     | '__root__'
     | '/'
@@ -343,8 +343,8 @@ export interface FileRouteTypes {
     | '/_authenticated/praxis/uebersicht'
     | '/_authenticated/praxis/zahlungen'
     | '/_authenticated/praxis/'
+    | '/_authenticated/praxis/patienten/$patientId'
     | '/_authenticated/praxis/patienten/'
-    | '/_authenticated/praxis/patienten/$patientId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -538,11 +538,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPraxisPatientenIndexRouteImport
       parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
-    '/_authenticated/praxis/patienten/$patientId/': {
-      id: '/_authenticated/praxis/patienten/$patientId/'
+    '/_authenticated/praxis/patienten/$patientId': {
+      id: '/_authenticated/praxis/patienten/$patientId'
       path: '/patienten/$patientId'
-      fullPath: '/praxis/patienten/$patientId/'
-      preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdIndexRouteImport
+      fullPath: '/praxis/patienten/$patientId'
+      preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdRouteImport
       parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
   }
@@ -560,8 +560,8 @@ interface AuthenticatedPraxisRouteRouteChildren {
   AuthenticatedPraxisUebersichtRoute: typeof AuthenticatedPraxisUebersichtRoute
   AuthenticatedPraxisZahlungenRoute: typeof AuthenticatedPraxisZahlungenRoute
   AuthenticatedPraxisIndexRoute: typeof AuthenticatedPraxisIndexRoute
+  AuthenticatedPraxisPatientenPatientIdRoute: typeof AuthenticatedPraxisPatientenPatientIdRoute
   AuthenticatedPraxisPatientenIndexRoute: typeof AuthenticatedPraxisPatientenIndexRoute
-  AuthenticatedPraxisPatientenPatientIdIndexRoute: typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
 }
 
 const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildren =
@@ -578,10 +578,10 @@ const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildr
     AuthenticatedPraxisUebersichtRoute: AuthenticatedPraxisUebersichtRoute,
     AuthenticatedPraxisZahlungenRoute: AuthenticatedPraxisZahlungenRoute,
     AuthenticatedPraxisIndexRoute: AuthenticatedPraxisIndexRoute,
+    AuthenticatedPraxisPatientenPatientIdRoute:
+      AuthenticatedPraxisPatientenPatientIdRoute,
     AuthenticatedPraxisPatientenIndexRoute:
       AuthenticatedPraxisPatientenIndexRoute,
-    AuthenticatedPraxisPatientenPatientIdIndexRoute:
-      AuthenticatedPraxisPatientenPatientIdIndexRoute,
   }
 
 const AuthenticatedPraxisRouteRouteWithChildren =
