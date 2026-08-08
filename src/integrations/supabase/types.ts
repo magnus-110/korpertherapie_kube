@@ -82,6 +82,7 @@ export type Database = {
           behandler_id: string | null
           created_at: string
           ende: string
+          episode_id: string | null
           id: string
           ist_intern: boolean
           patient_id: string
@@ -97,6 +98,7 @@ export type Database = {
           behandler_id?: string | null
           created_at?: string
           ende: string
+          episode_id?: string | null
           id?: string
           ist_intern?: boolean
           patient_id: string
@@ -112,6 +114,7 @@ export type Database = {
           behandler_id?: string | null
           created_at?: string
           ende?: string
+          episode_id?: string | null
           id?: string
           ist_intern?: boolean
           patient_id?: string
@@ -123,6 +126,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "appointments_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_episodes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "appointments_patient_id_fkey"
             columns: ["patient_id"]
@@ -359,6 +369,44 @@ export type Database = {
         }
         Relationships: []
       }
+      episode_documents: {
+        Row: {
+          aktualisiert_von: string | null
+          art: Database["public"]["Enums"]["episode_document_kind"]
+          created_at: string
+          episode_id: string
+          id: string
+          inhalt: Json
+          updated_at: string
+        }
+        Insert: {
+          aktualisiert_von?: string | null
+          art: Database["public"]["Enums"]["episode_document_kind"]
+          created_at?: string
+          episode_id: string
+          id?: string
+          inhalt?: Json
+          updated_at?: string
+        }
+        Update: {
+          aktualisiert_von?: string | null
+          art?: Database["public"]["Enums"]["episode_document_kind"]
+          created_at?: string
+          episode_id?: string
+          id?: string
+          inhalt?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "episode_documents_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_episodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_items: {
         Row: {
           betrag: number
@@ -399,6 +447,7 @@ export type Database = {
           betrag: number
           created_at: string
           datum: string
+          episode_id: string | null
           id: string
           patient_id: string
           rechnungsnummer: string
@@ -409,6 +458,7 @@ export type Database = {
           betrag: number
           created_at?: string
           datum: string
+          episode_id?: string | null
           id?: string
           patient_id: string
           rechnungsnummer: string
@@ -419,6 +469,7 @@ export type Database = {
           betrag?: number
           created_at?: string
           datum?: string
+          episode_id?: string | null
           id?: string
           patient_id?: string
           rechnungsnummer?: string
@@ -426,6 +477,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "invoices_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_episodes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "invoices_patient_id_fkey"
             columns: ["patient_id"]
@@ -584,6 +642,172 @@ export type Database = {
         }
         Relationships: []
       }
+      questionnaires: {
+        Row: {
+          antworten: Json
+          appointment_id: string
+          beantwortet_am: string | null
+          created_at: string
+          episode_id: string | null
+          faellig_ab: string
+          id: string
+          patient_id: string
+          status: Database["public"]["Enums"]["questionnaire_status"]
+          updated_at: string
+        }
+        Insert: {
+          antworten?: Json
+          appointment_id: string
+          beantwortet_am?: string | null
+          created_at?: string
+          episode_id?: string | null
+          faellig_ab: string
+          id?: string
+          patient_id: string
+          status?: Database["public"]["Enums"]["questionnaire_status"]
+          updated_at?: string
+        }
+        Update: {
+          antworten?: Json
+          appointment_id?: string
+          beantwortet_am?: string | null
+          created_at?: string
+          episode_id?: string | null
+          faellig_ab?: string
+          id?: string
+          patient_id?: string
+          status?: Database["public"]["Enums"]["questionnaire_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "questionnaires_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questionnaires_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_episodes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "questionnaires_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      session_notes: {
+        Row: {
+          appointment_id: string
+          befund: string | null
+          behandlung: string | null
+          created_at: string
+          episode_id: string | null
+          id: string
+          plan: string | null
+          updated_at: string
+          verfasst_von: string | null
+        }
+        Insert: {
+          appointment_id: string
+          befund?: string | null
+          behandlung?: string | null
+          created_at?: string
+          episode_id?: string | null
+          id?: string
+          plan?: string | null
+          updated_at?: string
+          verfasst_von?: string | null
+        }
+        Update: {
+          appointment_id?: string
+          befund?: string | null
+          behandlung?: string | null
+          created_at?: string
+          episode_id?: string | null
+          id?: string
+          plan?: string | null
+          updated_at?: string
+          verfasst_von?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_notes_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: true
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_notes_episode_id_fkey"
+            columns: ["episode_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_episodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      treatment_episodes: {
+        Row: {
+          anliegen: string | null
+          created_at: string
+          ende_datum: string | null
+          id: string
+          patient_id: string
+          practitioner_id: string | null
+          start_datum: string
+          status: Database["public"]["Enums"]["episode_status"]
+          titel: string
+          updated_at: string
+        }
+        Insert: {
+          anliegen?: string | null
+          created_at?: string
+          ende_datum?: string | null
+          id?: string
+          patient_id: string
+          practitioner_id?: string | null
+          start_datum?: string
+          status?: Database["public"]["Enums"]["episode_status"]
+          titel: string
+          updated_at?: string
+        }
+        Update: {
+          anliegen?: string | null
+          created_at?: string
+          ende_datum?: string | null
+          id?: string
+          patient_id?: string
+          practitioner_id?: string | null
+          start_datum?: string
+          status?: Database["public"]["Enums"]["episode_status"]
+          titel?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treatment_episodes_patient_id_fkey"
+            columns: ["patient_id"]
+            isOneToOne: false
+            referencedRelation: "patients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "treatment_episodes_practitioner_id_fkey"
+            columns: ["practitioner_id"]
+            isOneToOne: false
+            referencedRelation: "practitioners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -642,9 +866,12 @@ export type Database = {
       availability_mode: "offen" | "zu"
       bank_transaction_status: "offen" | "zugeordnet"
       contact_request_status: "neu" | "beantwortet" | "erledigt"
+      episode_document_kind: "body_chart" | "anamnese"
+      episode_status: "aktiv" | "abgeschlossen"
       exception_type: "gesperrt" | "freigegeben"
       invoice_status: "offen" | "bezahlt" | "angemahnt"
       payment_source: "kontoauszug" | "manuell"
+      questionnaire_status: "wartet" | "offen" | "beantwortet"
       tax_mode: "ust_frei_heilbehandlung" | "kleinunternehmer" | "ust_pflichtig"
     }
     CompositeTypes: {
@@ -780,9 +1007,12 @@ export const Constants = {
       availability_mode: ["offen", "zu"],
       bank_transaction_status: ["offen", "zugeordnet"],
       contact_request_status: ["neu", "beantwortet", "erledigt"],
+      episode_document_kind: ["body_chart", "anamnese"],
+      episode_status: ["aktiv", "abgeschlossen"],
       exception_type: ["gesperrt", "freigegeben"],
       invoice_status: ["offen", "bezahlt", "angemahnt"],
       payment_source: ["kontoauszug", "manuell"],
+      questionnaire_status: ["wartet", "offen", "beantwortet"],
       tax_mode: [
         "ust_frei_heilbehandlung",
         "kleinunternehmer",
