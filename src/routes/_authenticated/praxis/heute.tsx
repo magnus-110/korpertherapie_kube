@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { CalendarPlus } from "lucide-react";
 import { endOfDay, format, startOfDay } from "date-fns";
 import { de } from "date-fns/locale";
@@ -12,6 +12,7 @@ type Termin = {
   ende: string;
   status: string;
   ist_intern: boolean;
+  patient_id: string | null;
   patients: { name: string } | null;
   appointment_types: { name: string } | null;
   practitioners: { name: string; farbe: string } | null;
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/_authenticated/praxis/heute")({
     const { data } = await supabase
       .from("appointments")
       .select(
-        "id, start, ende, status, ist_intern, patients(name), appointment_types(name), practitioners(name, farbe)",
+        "id, start, ende, status, ist_intern, patient_id, patients(name), appointment_types(name), practitioners(name, farbe)",
       )
       .gte("start", startOfDay(jetzt).toISOString())
       .lte("start", endOfDay(jetzt).toISOString())
@@ -34,6 +35,7 @@ export const Route = createFileRoute("/_authenticated/praxis/heute")({
   head: () => ({ meta: [{ title: "Heute · Praxis Kube" }] }),
   component: HeuteSeite,
 });
+
 
 function HeuteSeite() {
   const { termine } = Route.useLoaderData() as { termine: Termin[] };
@@ -63,7 +65,18 @@ function HeuteSeite() {
           <p className="mt-1 text-sm text-sage">
             {naechster.appointment_types?.name ?? "Ohne Behandlungsart"}
           </p>
+          {naechster.patient_id ? (
+            <Button asChild variant="pillLight" size="pillSm" className="mt-4">
+              <Link
+                to="/praxis/patienten/$patientId"
+                params={{ patientId: naechster.patient_id }}
+              >
+                Akte öffnen
+              </Link>
+            </Button>
+          ) : null}
         </section>
+
       ) : (
         <section className="rounded-3xl border border-dashed border-border bg-card/60 p-8 text-center">
           <p className="font-display text-xl text-primary">Heute steht nichts an</p>

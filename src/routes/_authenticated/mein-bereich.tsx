@@ -22,10 +22,16 @@ type Rechnung = {
   betrag: number;
   status: string;
 };
+type Fragebogen = {
+  id: string;
+  status: string;
+  faellig_ab: string;
+  appointments: { start: string } | null;
+};
 
 export const Route = createFileRoute("/_authenticated/mein-bereich")({
   loader: async () => {
-    const [termine, rechnungen] = await Promise.all([
+    const [termine, rechnungen, fragebogen] = await Promise.all([
       supabase
         .from("appointments")
         .select("id, start, status, appointment_types(name), practitioners(name)")
@@ -34,12 +40,18 @@ export const Route = createFileRoute("/_authenticated/mein-bereich")({
         .from("invoices")
         .select("id, rechnungsnummer, datum, betrag, status")
         .order("datum", { ascending: false }),
+      supabase
+        .from("questionnaires")
+        .select("id, status, faellig_ab, appointments(start)")
+        .order("faellig_ab", { ascending: false }),
     ]);
     return {
       termine: (termine.data ?? []) as unknown as Termin[],
       rechnungen: (rechnungen.data ?? []) as Rechnung[],
+      fragebogen: (fragebogen.data ?? []) as unknown as Fragebogen[],
     };
   },
+
   head: () => ({
     meta: [
       { title: "Mein Bereich · Praxis Kube" },
@@ -56,10 +68,12 @@ const statusLabel: Record<string, string> = {
 };
 
 function MeinBereich() {
-  const { termine, rechnungen } = Route.useLoaderData() as {
+  const { termine, rechnungen, fragebogen } = Route.useLoaderData() as {
     termine: Termin[];
     rechnungen: Rechnung[];
+    fragebogen: Fragebogen[];
   };
+
   const navigate = useNavigate();
   const jetzt = Date.now();
   const kommend = termine.filter((t: Termin) => new Date(t.start).getTime() >= jetzt).reverse();
@@ -173,14 +187,36 @@ function MeinBereich() {
           </div>
 
           <div className="rounded-3xl bg-card p-6 shadow-[var(--shadow-soft-md)] sm:p-8">
-            <h2 className="mb-3 flex items-center gap-2 font-display text-xl text-primary">
+            <h2 className="mb-5 flex items-center gap-2 font-display text-xl text-primary">
               <HelpCircle className="size-5 text-secondary" aria-hidden="true" /> Fragebogen
             </h2>
-            <p className="text-muted-foreground">
-              Drei Tage nach deinem Termin findest du hier einen kurzen Fragebogen. Er wird
-              automatisch freigeschaltet.
-            </p>
+            {fragebogen.length === 0 ? (
+              <p className="text-muted-foreground">
+                Drei Tage nach deinem Termin findest du hier einen kurzen Fragebogen. Er wird
+                automatisch freigeschaltet.
+              </p>
+            ) : (
+              <ul className="grid gap-2">
+                {fragebogen.map((f: Fragebogen) => (
+                  <li
+                    key={f.id}
+                    className="flex flex-wrap items-center gap-3 rounded-xl bg-creme px-4 py-3"
+                  >
+                    <span className="text-sm font-semibold text-primary">
+                      Fragebogen zum Termin am{" "}
+                      {f.appointments?.start
+                        ? format(new Date(f.appointments.start), "d.M.yyyy", { locale: de })
+                        : "—"}
+                    </span>
+                    <span className="ml-auto rounded-full bg-sage/35 px-3 py-0.5 text-xs text-primary">
+                      {f.status === "beantwortet" ? "beantwortet" : "offen"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
+
         </div>
       </section>
     </SiteLayout>

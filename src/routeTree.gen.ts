@@ -29,11 +29,13 @@ import { Route as AuthenticatedPraxisHeuteRouteImport } from './routes/_authenti
 import { Route as AuthenticatedPraxisKalenderRouteImport } from './routes/_authenticated/praxis/kalender'
 import { Route as AuthenticatedPraxisMahnungenRouteImport } from './routes/_authenticated/praxis/mahnungen'
 import { Route as AuthenticatedPraxisNewsletterRouteImport } from './routes/_authenticated/praxis/newsletter'
-import { Route as AuthenticatedPraxisPatientenRouteImport } from './routes/_authenticated/praxis/patienten'
 import { Route as AuthenticatedPraxisRechnungenRouteImport } from './routes/_authenticated/praxis/rechnungen'
 import { Route as AuthenticatedPraxisSucheRouteImport } from './routes/_authenticated/praxis/suche'
 import { Route as AuthenticatedPraxisUebersichtRouteImport } from './routes/_authenticated/praxis/uebersicht'
 import { Route as AuthenticatedPraxisZahlungenRouteImport } from './routes/_authenticated/praxis/zahlungen'
+import { Route as AuthenticatedPraxisPatientenIndexRouteImport } from './routes/_authenticated/praxis/patienten.index'
+import { Route as AuthenticatedPraxisPatientenPatientIdIndexRouteImport } from './routes/_authenticated/praxis/patienten.$patientId.index'
+import { Route as AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRouteImport } from './routes/_authenticated/praxis/patienten.$patientId.episode.$episodeId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -143,12 +145,6 @@ const AuthenticatedPraxisNewsletterRoute =
     path: '/newsletter',
     getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
-const AuthenticatedPraxisPatientenRoute =
-  AuthenticatedPraxisPatientenRouteImport.update({
-    id: '/patienten',
-    path: '/patienten',
-    getParentRoute: () => AuthenticatedPraxisRouteRoute,
-  } as any)
 const AuthenticatedPraxisRechnungenRoute =
   AuthenticatedPraxisRechnungenRouteImport.update({
     id: '/rechnungen',
@@ -173,6 +169,24 @@ const AuthenticatedPraxisZahlungenRoute =
     path: '/zahlungen',
     getParentRoute: () => AuthenticatedPraxisRouteRoute,
   } as any)
+const AuthenticatedPraxisPatientenIndexRoute =
+  AuthenticatedPraxisPatientenIndexRouteImport.update({
+    id: '/patienten/',
+    path: '/patienten/',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisPatientenPatientIdIndexRoute =
+  AuthenticatedPraxisPatientenPatientIdIndexRouteImport.update({
+    id: '/patienten/$patientId/',
+    path: '/patienten/$patientId/',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
+const AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute =
+  AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRouteImport.update({
+    id: '/patienten/$patientId/episode/$episodeId',
+    path: '/patienten/$patientId/episode/$episodeId',
+    getParentRoute: () => AuthenticatedPraxisRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -193,12 +207,14 @@ export interface FileRoutesByFullPath {
   '/praxis/kalender': typeof AuthenticatedPraxisKalenderRoute
   '/praxis/mahnungen': typeof AuthenticatedPraxisMahnungenRoute
   '/praxis/newsletter': typeof AuthenticatedPraxisNewsletterRoute
-  '/praxis/patienten': typeof AuthenticatedPraxisPatientenRoute
   '/praxis/rechnungen': typeof AuthenticatedPraxisRechnungenRoute
   '/praxis/suche': typeof AuthenticatedPraxisSucheRoute
   '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/praxis/': typeof AuthenticatedPraxisIndexRoute
+  '/praxis/patienten/': typeof AuthenticatedPraxisPatientenIndexRoute
+  '/praxis/patienten/$patientId/': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
+  '/praxis/patienten/$patientId/episode/$episodeId': typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -218,12 +234,14 @@ export interface FileRoutesByTo {
   '/praxis/kalender': typeof AuthenticatedPraxisKalenderRoute
   '/praxis/mahnungen': typeof AuthenticatedPraxisMahnungenRoute
   '/praxis/newsletter': typeof AuthenticatedPraxisNewsletterRoute
-  '/praxis/patienten': typeof AuthenticatedPraxisPatientenRoute
   '/praxis/rechnungen': typeof AuthenticatedPraxisRechnungenRoute
   '/praxis/suche': typeof AuthenticatedPraxisSucheRoute
   '/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/praxis': typeof AuthenticatedPraxisIndexRoute
+  '/praxis/patienten': typeof AuthenticatedPraxisPatientenIndexRoute
+  '/praxis/patienten/$patientId': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
+  '/praxis/patienten/$patientId/episode/$episodeId': typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -246,12 +264,14 @@ export interface FileRoutesById {
   '/_authenticated/praxis/kalender': typeof AuthenticatedPraxisKalenderRoute
   '/_authenticated/praxis/mahnungen': typeof AuthenticatedPraxisMahnungenRoute
   '/_authenticated/praxis/newsletter': typeof AuthenticatedPraxisNewsletterRoute
-  '/_authenticated/praxis/patienten': typeof AuthenticatedPraxisPatientenRoute
   '/_authenticated/praxis/rechnungen': typeof AuthenticatedPraxisRechnungenRoute
   '/_authenticated/praxis/suche': typeof AuthenticatedPraxisSucheRoute
   '/_authenticated/praxis/uebersicht': typeof AuthenticatedPraxisUebersichtRoute
   '/_authenticated/praxis/zahlungen': typeof AuthenticatedPraxisZahlungenRoute
   '/_authenticated/praxis/': typeof AuthenticatedPraxisIndexRoute
+  '/_authenticated/praxis/patienten/': typeof AuthenticatedPraxisPatientenIndexRoute
+  '/_authenticated/praxis/patienten/$patientId/': typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
+  '/_authenticated/praxis/patienten/$patientId/episode/$episodeId': typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -274,12 +294,14 @@ export interface FileRouteTypes {
     | '/praxis/kalender'
     | '/praxis/mahnungen'
     | '/praxis/newsletter'
-    | '/praxis/patienten'
     | '/praxis/rechnungen'
     | '/praxis/suche'
     | '/praxis/uebersicht'
     | '/praxis/zahlungen'
     | '/praxis/'
+    | '/praxis/patienten/'
+    | '/praxis/patienten/$patientId/'
+    | '/praxis/patienten/$patientId/episode/$episodeId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -299,12 +321,14 @@ export interface FileRouteTypes {
     | '/praxis/kalender'
     | '/praxis/mahnungen'
     | '/praxis/newsletter'
-    | '/praxis/patienten'
     | '/praxis/rechnungen'
     | '/praxis/suche'
     | '/praxis/uebersicht'
     | '/praxis/zahlungen'
     | '/praxis'
+    | '/praxis/patienten'
+    | '/praxis/patienten/$patientId'
+    | '/praxis/patienten/$patientId/episode/$episodeId'
   id:
     | '__root__'
     | '/'
@@ -326,12 +350,14 @@ export interface FileRouteTypes {
     | '/_authenticated/praxis/kalender'
     | '/_authenticated/praxis/mahnungen'
     | '/_authenticated/praxis/newsletter'
-    | '/_authenticated/praxis/patienten'
     | '/_authenticated/praxis/rechnungen'
     | '/_authenticated/praxis/suche'
     | '/_authenticated/praxis/uebersicht'
     | '/_authenticated/praxis/zahlungen'
     | '/_authenticated/praxis/'
+    | '/_authenticated/praxis/patienten/'
+    | '/_authenticated/praxis/patienten/$patientId/'
+    | '/_authenticated/praxis/patienten/$patientId/episode/$episodeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -490,13 +516,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPraxisNewsletterRouteImport
       parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
-    '/_authenticated/praxis/patienten': {
-      id: '/_authenticated/praxis/patienten'
-      path: '/patienten'
-      fullPath: '/praxis/patienten'
-      preLoaderRoute: typeof AuthenticatedPraxisPatientenRouteImport
-      parentRoute: typeof AuthenticatedPraxisRouteRoute
-    }
     '/_authenticated/praxis/rechnungen': {
       id: '/_authenticated/praxis/rechnungen'
       path: '/rechnungen'
@@ -525,6 +544,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPraxisZahlungenRouteImport
       parentRoute: typeof AuthenticatedPraxisRouteRoute
     }
+    '/_authenticated/praxis/patienten/': {
+      id: '/_authenticated/praxis/patienten/'
+      path: '/patienten'
+      fullPath: '/praxis/patienten/'
+      preLoaderRoute: typeof AuthenticatedPraxisPatientenIndexRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/patienten/$patientId/': {
+      id: '/_authenticated/praxis/patienten/$patientId/'
+      path: '/patienten/$patientId'
+      fullPath: '/praxis/patienten/$patientId/'
+      preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdIndexRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
+    '/_authenticated/praxis/patienten/$patientId/episode/$episodeId': {
+      id: '/_authenticated/praxis/patienten/$patientId/episode/$episodeId'
+      path: '/patienten/$patientId/episode/$episodeId'
+      fullPath: '/praxis/patienten/$patientId/episode/$episodeId'
+      preLoaderRoute: typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRouteImport
+      parentRoute: typeof AuthenticatedPraxisRouteRoute
+    }
   }
 }
 
@@ -535,12 +575,14 @@ interface AuthenticatedPraxisRouteRouteChildren {
   AuthenticatedPraxisKalenderRoute: typeof AuthenticatedPraxisKalenderRoute
   AuthenticatedPraxisMahnungenRoute: typeof AuthenticatedPraxisMahnungenRoute
   AuthenticatedPraxisNewsletterRoute: typeof AuthenticatedPraxisNewsletterRoute
-  AuthenticatedPraxisPatientenRoute: typeof AuthenticatedPraxisPatientenRoute
   AuthenticatedPraxisRechnungenRoute: typeof AuthenticatedPraxisRechnungenRoute
   AuthenticatedPraxisSucheRoute: typeof AuthenticatedPraxisSucheRoute
   AuthenticatedPraxisUebersichtRoute: typeof AuthenticatedPraxisUebersichtRoute
   AuthenticatedPraxisZahlungenRoute: typeof AuthenticatedPraxisZahlungenRoute
   AuthenticatedPraxisIndexRoute: typeof AuthenticatedPraxisIndexRoute
+  AuthenticatedPraxisPatientenIndexRoute: typeof AuthenticatedPraxisPatientenIndexRoute
+  AuthenticatedPraxisPatientenPatientIdIndexRoute: typeof AuthenticatedPraxisPatientenPatientIdIndexRoute
+  AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute: typeof AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute
 }
 
 const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildren =
@@ -552,12 +594,17 @@ const AuthenticatedPraxisRouteRouteChildren: AuthenticatedPraxisRouteRouteChildr
     AuthenticatedPraxisKalenderRoute: AuthenticatedPraxisKalenderRoute,
     AuthenticatedPraxisMahnungenRoute: AuthenticatedPraxisMahnungenRoute,
     AuthenticatedPraxisNewsletterRoute: AuthenticatedPraxisNewsletterRoute,
-    AuthenticatedPraxisPatientenRoute: AuthenticatedPraxisPatientenRoute,
     AuthenticatedPraxisRechnungenRoute: AuthenticatedPraxisRechnungenRoute,
     AuthenticatedPraxisSucheRoute: AuthenticatedPraxisSucheRoute,
     AuthenticatedPraxisUebersichtRoute: AuthenticatedPraxisUebersichtRoute,
     AuthenticatedPraxisZahlungenRoute: AuthenticatedPraxisZahlungenRoute,
     AuthenticatedPraxisIndexRoute: AuthenticatedPraxisIndexRoute,
+    AuthenticatedPraxisPatientenIndexRoute:
+      AuthenticatedPraxisPatientenIndexRoute,
+    AuthenticatedPraxisPatientenPatientIdIndexRoute:
+      AuthenticatedPraxisPatientenPatientIdIndexRoute,
+    AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute:
+      AuthenticatedPraxisPatientenPatientIdEpisodeEpisodeIdRoute,
   }
 
 const AuthenticatedPraxisRouteRouteWithChildren =
@@ -594,13 +641,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
