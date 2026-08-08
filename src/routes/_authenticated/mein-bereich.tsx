@@ -22,10 +22,16 @@ type Rechnung = {
   betrag: number;
   status: string;
 };
+type Fragebogen = {
+  id: string;
+  status: string;
+  faellig_ab: string;
+  appointments: { start: string } | null;
+};
 
 export const Route = createFileRoute("/_authenticated/mein-bereich")({
   loader: async () => {
-    const [termine, rechnungen] = await Promise.all([
+    const [termine, rechnungen, fragebogen] = await Promise.all([
       supabase
         .from("appointments")
         .select("id, start, status, appointment_types(name), practitioners(name)")
@@ -34,12 +40,18 @@ export const Route = createFileRoute("/_authenticated/mein-bereich")({
         .from("invoices")
         .select("id, rechnungsnummer, datum, betrag, status")
         .order("datum", { ascending: false }),
+      supabase
+        .from("questionnaires")
+        .select("id, status, faellig_ab, appointments(start)")
+        .order("faellig_ab", { ascending: false }),
     ]);
     return {
       termine: (termine.data ?? []) as unknown as Termin[],
       rechnungen: (rechnungen.data ?? []) as Rechnung[],
+      fragebogen: (fragebogen.data ?? []) as unknown as Fragebogen[],
     };
   },
+
   head: () => ({
     meta: [
       { title: "Mein Bereich · Praxis Kube" },
